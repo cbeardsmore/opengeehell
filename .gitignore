@@ -31,3 +31,23 @@
 # Debug files
 *.dSYM/
 *.su
+
+# Mac files
+*.DS_Store
+
+# LaTex
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.toc
+*.synctex.gz
+*.lot
+*.tex.*
+
+# LaTex Bib Files
+*.bcf
+*.lof
+*.run.xml
+*-blx.bib
