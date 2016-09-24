@@ -18,5 +18,5 @@ sample.o : sample.c sample.h
 	gcc -c sample.c $(DEPRECATED)
 
 clean :
-	rm -f -R $(EXEC) $(OBJ)
+	rm -f -R $(EXEC) $(OBJ) *.gch
 	rm -f -R {$(LATEX)}

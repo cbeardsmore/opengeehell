@@ -18,6 +18,9 @@ int imageLoad(char *filename, Image *image)
     FILE *file;
     unsigned long size;                 // image size (bytes)
     unsigned long i;                    // standard counter
+    unsigned long iheight;
+    unsigned long iwidth;
+    unsigned long status;
     unsigned short int planes;          // image planes (1)
     unsigned short int bpp;             // bits per pixel (24)
     char temp;                          // temporary color storage
@@ -34,44 +37,34 @@ int imageLoad(char *filename, Image *image)
     fseek(file, 18, SEEK_CUR);
 
     // Read width
-    if ((i = fread(&image->sizeX, 4, 1, file)) != 1)
-    {
-    	printf("Error reading width from %s.\n", filename);
-    	return 0;
-    }
-    printf("Width of %s: %lu\n", filename, image->sizeX);
+    iheight = fread(&image->sizeX, 4, 1, file);
+    iwidth  = fread(&image->sizeY, 4, 1, file)
 
-    // Read height
-    if ((i = fread(&image->sizeY, 4, 1, file)) != 1)
+    if ( ( iheight != 1 ) || ( iwidth != 1 ) )
     {
-    	printf("Error reading height from %s.\n", filename);
-    	return 0;
+        printf("Error reading height/width from %s.\n", filename);
+        return 0;
     }
+
     printf("Height of %s: %lu\n", filename, image->sizeY);
+    printf("Width of %s: %lu\n", filename, image->sizeX);
 
     // Calculate size
     size = image->sizeX * image->sizeY * 3;
 
     // Read planes
-    if ((fread(&planes, 2, 1, file)) != 1)
+    status = fread(&planes, 2, 1, file);
+    if ( ( status != 1 ) || ( planes !=1 ) )
     {
-	printf("Error reading planes from %s.\n", filename);
-	return 0;
-    }
-    if (planes != 1)
-    {
-        printf("Planes from %s is not 1: %u\n", filename, planes);
-        return 0;
+    	printf("Error reading planes/planes not 1 from %s.\n", filename);
+    	return 0;
     }
 
     // Read BPP
-    if ((i = fread(&bpp, 2, 1, file)) != 1)
+    status = fread(&bpp, 2, 1, file);
+    if ( ( status != 1 ) || ( bpp != 24 ) )
     {
-        printf("Error reading bpp from %s.\n", filename);
-        return 0;
-    }
-    if (bpp != 24) {
-        printf("Bpp from %s is not 24: %u\n", filename, bpp);
+        printf("Error reading bpp/bpp not 24 from %s.\n", filename);
         return 0;
     }
 
@@ -80,12 +73,14 @@ int imageLoad(char *filename, Image *image)
 
     // Read data
     image->data = (char *) malloc(size);
-    if (image->data == NULL) {
+    if ( image->data == NULL )
+    {
         printf("Error allocating memory for color-corrected image data");
         return 0;
     }
 
-    if ((i = fread(image->data, size, 1, file)) != 1)
+    status = fread(image->data, size, 1, file);
+    if ( status != 1 )
     {
         printf("Error reading image data from %s.\n", filename);
         return 0;
@@ -128,15 +123,17 @@ void loadGLTextures()
     }
 
     // Create Texture
-    glGenTextures(1, &texture[0]);
-    glBindTexture(GL_TEXTURE_2D, texture[0]);   // 2D texture (X and Y)
+    glGenTextures( 1, &texture[0] );
+    glBindTexture( GL_TEXTURE_2D, texture[0] );   // 2D texture (X and Y)
 
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // scale linearly when image bigger than texture
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR); // scale linearly when image smalled than texture
+    // Scale linearly when image bigger/smaller than texture
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 
-    // 2d texture, level of detail 0 (normal), 3 components (red, green, blue), x size from image, y size from image,
-    // border 0 (normal), rgb color data, unsigned byte data, and finally the data itself.
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY, 0, GL_RGB, GL_UNSIGNED_BYTE, image1->data);
+    // 2D Texture, level of detail, number componenets
+    // X size, Y size, border, rgb data, data, data
+    glTexImage2D( GL_TEXTURE_2D, 0, 3, image1->sizeX, image1->sizeY,
+                         0, GL_RGB, GL_UNSIGNED_BYTE, image1->data );
 }
 
 //---------------------------------------------------------------------------

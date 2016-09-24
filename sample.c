@@ -40,14 +40,14 @@ int main(int argc, char **argv)
 	glutInitWindowPosition(100, 100);
 
 	// Create window and initialise window
-	glutCreateWindow("CG200 Assignment 2");
+	glutCreateWindow("Under The Sea - CG Assignment 2");
 	init();
 
 	// Set callback functions
-	glutDisplayFunc (display);
-	glutReshapeFunc (reshape);
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
 	glutKeyboardFunc(input);
-	glutIdleFunc    (idle);
+	glutIdleFunc(idle);
 
 	glutMainLoop();
 	return 0;
@@ -60,14 +60,14 @@ int main(int argc, char **argv)
 void init()
 {
     // Background color and enable depth testing
-	glClearColor((float) 0.3, (float) 0.0, (float) 0.5, (float) 0.0);
+	glClearColor( 0.3,  0.0,  0.5,  0.0 );
 	glEnable(GL_DEPTH_TEST);
 
 	// Initial rotation and scale factors
 	alpha = -20.0;
 	beta  = 20.0;
 	scale = 1.0;
-	inc = 1;
+	inc   = 1;
 }
 
 //---------------------------------------------------------------------------
@@ -76,49 +76,40 @@ void init()
 
 void draw()
 {
-	/* set the colour to red and draw the coordinate
-	 * axes. GL_LINES defines segments of straight
-	 * lines connecting vertices v1 with v2, v3 with
-	 * v4, v5 with v6, etc.  */
-    glColor3f((float) 1.0, (float) 0.0, (float) 0.0);
+    // Set colour to red and lines connecting vertices
+    glColor3f( 1.0, 0.0, 0.0 );
 	glBegin(GL_LINES);
-		glVertex3f(-(float)(2.0*CUBE_SIZE), (float) 0, (float) 0);
-		glVertex3f( (float)(2.0*CUBE_SIZE), (float) 0, (float) 0);
-		glVertex3f( (float) 0,-(float)(2.0*CUBE_SIZE), (float) 0);
-		glVertex3f( (float) 0, (float)(2.0*CUBE_SIZE), (float) 0);
-		glVertex3f( (float) 0, (float) 0,-(float)(2.0*CUBE_SIZE));
-		glVertex3f( (float) 0, (float) 0, (float)(2.0*CUBE_SIZE));
+		glVertex3f( -(2.0*CUBE_SIZE), 0, 0);
+		glVertex3f(  (2.0*CUBE_SIZE), 0, 0);
+		glVertex3f( 0, -(2.0*CUBE_SIZE), 0);
+		glVertex3f( 0,  (2.0*CUBE_SIZE), 0);
+		glVertex3f( 0, 0, -(2.0*CUBE_SIZE));
+		glVertex3f( 0, 0,  (2.0*CUBE_SIZE));
 	glEnd();
 
-	/* set the colour to green and draw a cube - one
-	 * polyline and three segments. GL_LINE_STRIP
-	 * defines a polyline connecting vertices v1, v2,
-	 * v3,...,vn. It can be done in for {...} as
-	 * well.  */
-    glColor3f((float) 0.0, (float) 1.0, (float) 0.0);
+    // Set colour to green and draw a cube
+    glColor3f( 0.0,  1.0,  0.0);
 	glBegin(GL_LINE_STRIP);
-		glVertex3f(-(float)CUBE_SIZE, -(float)CUBE_SIZE, -(float)CUBE_SIZE);
-		glVertex3f( (float)CUBE_SIZE, -(float)CUBE_SIZE, -(float)CUBE_SIZE);
-		glVertex3f( (float)CUBE_SIZE, -(float)CUBE_SIZE,  (float)CUBE_SIZE);
-		glVertex3f(-(float)CUBE_SIZE, -(float)CUBE_SIZE,  (float)CUBE_SIZE);
-		glVertex3f(-(float)CUBE_SIZE, -(float)CUBE_SIZE, -(float)CUBE_SIZE);
-		glVertex3f(-(float)CUBE_SIZE,  (float)CUBE_SIZE, -(float)CUBE_SIZE);
-		glVertex3f( (float)CUBE_SIZE,  (float)CUBE_SIZE, -(float)CUBE_SIZE);
-		glVertex3f( (float)CUBE_SIZE,  (float)CUBE_SIZE,  (float)CUBE_SIZE);
-		glVertex3f(-(float)CUBE_SIZE,  (float)CUBE_SIZE,  (float)CUBE_SIZE);
-		glVertex3f(-(float)CUBE_SIZE,  (float)CUBE_SIZE, -(float)CUBE_SIZE);
+		glVertex3f( -CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE );
+		glVertex3f(  CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE );
+		glVertex3f(  CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE );
+		glVertex3f( -CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE );
+		glVertex3f( -CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE );
+		glVertex3f( -CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE );
+		glVertex3f(  CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE );
+		glVertex3f(  CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE );
+		glVertex3f( -CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE );
+		glVertex3f( -CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE );
     glEnd();
 
-	/* GL_LINES defines segments of straight lines
-	 * connecting vertices v1 with v2, v3 with v4,
-	 * v5 with v6, etc.  */
+	// Defines lines connecting vertices
 	glBegin(GL_LINES);
-		glVertex3f( (float)CUBE_SIZE, -(float)CUBE_SIZE, -(float)CUBE_SIZE);
-		glVertex3f( (float)CUBE_SIZE,  (float)CUBE_SIZE, -(float)CUBE_SIZE);
-		glVertex3f( (float)CUBE_SIZE, -(float)CUBE_SIZE,  (float)CUBE_SIZE);
-		glVertex3f( (float)CUBE_SIZE,  (float)CUBE_SIZE,  (float)CUBE_SIZE);
-		glVertex3f(-(float)CUBE_SIZE, -(float)CUBE_SIZE,  (float)CUBE_SIZE);
-		glVertex3f(-(float)CUBE_SIZE,  (float)CUBE_SIZE,  (float)CUBE_SIZE);
+		glVertex3f( CUBE_SIZE, -CUBE_SIZE, -CUBE_SIZE);
+		glVertex3f( CUBE_SIZE,  CUBE_SIZE, -CUBE_SIZE);
+		glVertex3f( CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE);
+		glVertex3f( CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE);
+		glVertex3f(-CUBE_SIZE, -CUBE_SIZE,  CUBE_SIZE);
+		glVertex3f(-CUBE_SIZE,  CUBE_SIZE,  CUBE_SIZE);
 	glEnd();
 }
 
@@ -136,16 +127,13 @@ void display(void)
 		alpha = alpha + (float) inc;
 
 		// Reset rotation value when it reaches 360
-		if( alpha  > 360.0 )
-        {
-			alpha -= 360.0;
-        }
+		if( alpha  > 360.0 ) { alpha -= 360.0; }
 
         // Translation and rotation transformations
         // Changing scale introduces scaling transformation
-		glTranslatef((float) 0.0, (float) 0.0, -(float) (5.0 * CUBE_SIZE));
-		glRotatef(beta , (float) 1.0, (float) 0.0, (float) 0.0);
-		glRotatef(alpha, (float) 0.0, (float) 1.0, (float) 0.0);
+		glTranslatef( 0.0, 0.0, -(5.0 * CUBE_SIZE));
+		glRotatef(beta , 1.0, 0.0, 0.0);
+		glRotatef(alpha, 0.0, 1.0, 0.0);
 		glScalef(scale, scale, scale);
 
 		draw();
@@ -171,10 +159,10 @@ void reshape(int width, int height)
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
-	/*glOrtho(-(float) 2.0*CUBE_SIZE, (float) 2.0*CUBE_SIZE, -(float) 2.0*CUBE_SIZE,
-	           (float) 2.0*CUBE_SIZE, (float) 0.0*CUBE_SIZE,  (float)10.0*CUBE_SIZE);*/
-	glFrustum(-(float) 2.0*CUBE_SIZE, (float) 2.0*CUBE_SIZE, -(float) 2.0*CUBE_SIZE,
-			   (float) 2.0*CUBE_SIZE, (float) 3.0*CUBE_SIZE,  (float)40.0*CUBE_SIZE);
+	/*glOrtho(- 2.0*CUBE_SIZE,  2.0*CUBE_SIZE, - 2.0*CUBE_SIZE,
+	            2.0*CUBE_SIZE,  0.0*CUBE_SIZE,  10.0*CUBE_SIZE);*/
+	glFrustum( -2.0*CUBE_SIZE, 2.0*CUBE_SIZE, -2.0*CUBE_SIZE,
+			    2.0*CUBE_SIZE, 3.0*CUBE_SIZE, 40.0*CUBE_SIZE );
 
 	glMatrixMode(GL_MODELVIEW);
 }
@@ -184,16 +172,46 @@ void reshape(int width, int height)
 // IMPORT: key (char), x (int), y (int)
 // PURPOSE: Callback when key pressed
 
-void input(char key, int x, int y)
+void input(unsigned char key, int x, int y)
 {
-	if ( key == 's' )
+    switch( key )
     {
-        // If rotation has stopped then restart, otherwise stop
-		if ( inc == 1 )
-			inc = 0;
-		else
-			inc = 1;
+        case 's':   if ( inc == 1 )
+                        inc = 0;
+                    else
+                        inc = 1;
+                    break;
+        // Zoom in 0.1
+        case 'Z':   break;
+        //Zoom out 0.1
+        case 'z':   break;
+        // X rotation
+        case 'X':
+        case 'x':   break;
+        // Y rotation
+        case 'Y':
+        case 'y':   break;
+        // Animation
+        case 'A':
+        case 'a':   break;
+        // Faster
+        case 'F':
+        case 'f':   break;
+        // Slower
+        //case 'S':
+        //case 's':   break;
+        // Pause
+        case 'T':
+        case 't':   break;
+        // Resume
+        case 'C':
+        case 'c':   break;
+        // Flat shaded polygonization
+        case 'p':   break;
+        // Smooth shaded polygonization
+        case 'P':   break;
     }
+
 }
 
 //---------------------------------------------------------------------------

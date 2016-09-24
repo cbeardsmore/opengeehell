@@ -13,8 +13,8 @@
 // WINDOW_HEIGHT:	The height of the window in pixels
 
 #define	CUBE_SIZE     1.0
-#define WINDOW_WIDTH  400
-#define WINDOW_HEIGHT 400
+#define WINDOW_WIDTH  1400
+#define WINDOW_HEIGHT 800
 
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES
@@ -23,7 +23,7 @@ void init();
 void draw();
 void display(void);
 void reshape(int, int);
-void input(char, int, int);
+void input(unsigned char, int, int);
 void idle(void);
 
 //---------------------------------------------------------------------------
