@@ -9,11 +9,21 @@
 
 #include "main.hpp"
 using namespace std;
+#define	CUBE_SIZE 20.0
+#define zoomIncrement 0.1
 
 float angle = 30.0f;
 float cameraAngle = 0.0f;
 GLuint textureID;
+const float BOX_SIZE = 7.0f;
+int paused = 1;
 
+GLfloat zoom = zoomIncrement;
+GLfloat xRot;
+GLfloat yRot;
+GLfloat xAngle;
+GLfloat yAngle;
+GLfloat speed;
 
 //---------------------------------------------------------------------------
 // NAME: loadTexture()
@@ -46,34 +56,57 @@ void input(unsigned char key, int mouseX, int mouseY)
 	switch (key)
     {
         // Exit
-		case 'U':
-        case 'u':
+		case 'Q':
+        case 'q':
 			exit(0);
         // Zoom in 0.1
-        case 'Z':   break;
+        case 'Z':
+            if (zoom < 3.0f)
+    			zoom += zoomIncrement;
+            break;
         //Zoom out 0.1
-        case 'z':   break;
+        case 'z':
+            if (zoom > 0.2f)
+                zoom -= zoomIncrement;
+            break;
         // X rotation
         case 'X':
-        case 'x':   break;
+        case 'x':
+            xRot = !xRot;
+            break;
         // Y rotation
         case 'Y':
-        case 'y':   break;
+        case 'y':
+            yRot = !yRot;
+            break;
         // Animation
         case 'A':
-        case 'a':   break;
+        case 'a':
+            paused = 0;
+            if ( speed < 0.01 )
+                speed += 0.01;
         // Faster
         case 'F':
-        case 'f':   break;
+        case 'f':
+            if ( speed < 1 )
+                speed += 0.01;
+            break;
         // Slower
         case 'S':
-        case 's':   break;
+        case 's':
+            if ( speed >= 0.01 )
+                speed -= 0.01;
+            break;
         // Pause
         case 'T':
-        case 't':   break;
+        case 't':
+            paused = 1;
+            break;
         // Resume
         case 'C':
-        case 'c':   break;
+        case 'c':
+            paused = 0;
+            break;
         // Flat shaded polygonization
         case 'p':   glShadeModel( GL_FLAT );
                     break;
@@ -90,18 +123,65 @@ void input(unsigned char key, int mouseX, int mouseY)
 void init()
 {
     // Background color and enable depth testing
-    glClearColor(0.7f, 0.9f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable( GL_DEPTH_TEST );
     glEnable( GL_COLOR_MATERIAL );
     glEnable( GL_LIGHTING );
     glEnable( GL_LIGHT0 );
     glEnable( GL_LIGHT1 );
     glEnable( GL_NORMALIZE );
+
+    // Shading model
     glShadeModel( GL_SMOOTH );
 
+    // Load textures
     Image* image = loadBMP( "vtr.bmp" );
     textureID = loadTexture( image );
     delete image;
+}
+
+//---------------------------------------------------------------------------
+// NAME: GLPrint()
+// IMPORT: text (char*), inX (float), inY (float)
+// PURPOE: Draw line of text at given coordinates
+
+void GLPrint(const char* text, float inX, float inY)
+{
+	int i;
+	int length = strlen(text);
+
+	glColor3f(1.0,1.0,1.0);
+	glRasterPos3f(inX,inY,-15.0f);
+	glPushMatrix();
+
+	// Print one char at a time over the entire string
+	for(i=0; i < length; i++)
+		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, text[i]);
+
+	glPopMatrix();
+}
+
+//---------------------------------------------------------------------------
+// NAME: printControls()
+// PURPOSE: Calls to GLPrint() to output text to the display
+
+void printControls()
+{
+    glDisable(GL_LIGHTING);
+	glPushMatrix();
+		glRotatef(-15.0f,1.0f,0.0f,0.0f);
+
+		GLPrint("Input:",-15.0,12.0);
+		GLPrint("<z>/<Z> : Zooms in/out",-15.0,11.0);
+		GLPrint("<x>/<X> : X-axis rotation clock/anti-clockwise",-15.0,10.0);
+		GLPrint("<y>/<Y> : Y-axis rotation clock/anti-clockwise",-15.0,9.0);
+		GLPrint("<p>/<P> : Turn on Smooth/Flat Shading",-15.0,8.0);
+		GLPrint("<a>/<A> : Start animation",-15.0,7.0);
+		GLPrint("<t>/<T> : Pause animation",-15.0,6.0);
+		GLPrint("<c>/<C> : Resume Animation",-15.0,5.0);
+		GLPrint("<Esc> : Quit the program",-15.0,4.0);
+	glPopMatrix();
+	glEnable(GL_LIGHTING);
 }
 
 //---------------------------------------------------------------------------
@@ -116,11 +196,12 @@ void resize(int width, int height)
 	glMatrixMode( GL_PROJECTION );
 
     // Reset camera
-	glLoadIdentity(); //Reset the camera
+	glLoadIdentity();
 
     // Angle, w/h ratio, Near Z clipping, Far Z clipping
     double ratio = (double)width / (double)height;
 	gluPerspective( 45.0, ratio , 1.0, 200.0 );
+    glMatrixMode(GL_MODELVIEW);
 }
 
 //---------------------------------------------------------------------------
@@ -131,70 +212,118 @@ void display()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+	glLoadIdentity();
 
-	glTranslatef(0.0f, 1.0f, -6.0f);
+	glTranslatef(0.0f, 0.0f, -20.0f);
+    glScalef( zoom, zoom, zoom );
 
-	GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 1.0f};
+
+    if ( xRot )
+        xAngle += 0.5;
+    if ( yRot )
+        yAngle += 0.5;
+
+    glRotatef( xAngle, 0.0f, 1.0f, 0.0f );
+    glRotatef( yAngle, 1.0f, 0.0f, 0.0f );
+
+
+	GLfloat ambientLight[] = {0.3f, 0.3f, 0.3f, 1.0f};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+	GLfloat lightColor[] = {0.7f, 0.7f, 0.7f, 1.0f};
+	GLfloat lightPos[] = {-2 * BOX_SIZE, BOX_SIZE, 4 * BOX_SIZE, 1.0f};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
-	GLfloat directedLight[] = {0.7f, 0.7f, 0.7f, 1.0f};
-	GLfloat directedLightPos[] = {-10.0f, 15.0f, 20.0f, 0.0f};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, directedLight);
-	glLightfv(GL_LIGHT0, GL_POSITION, directedLightPos);
+    // Lines to show the 3 axis on the screen for reference
+	glBegin(GL_LINES);
+        // X LINE IS RED
+        glColor3f( 1.0, 0.0, 0.0 );
+		glVertex3f( -(2.0*CUBE_SIZE), 0, 0);
+		glVertex3f(  (2.0*CUBE_SIZE), 0, 0);
+        // Y LINE IS GREEEN
+        glColor3f( 0.0, 1.0, 0.0 );
+		glVertex3f( 0, -(2.0*CUBE_SIZE), 0);
+		glVertex3f( 0,  (2.0*CUBE_SIZE), 0);
+        // Z LINE IS BLUE
+        glColor3f( 0.0, 0.0, 1.0 );
+		glVertex3f( 0, 0, -(2.0*CUBE_SIZE));
+		glVertex3f( 0, 0,  (2.0*CUBE_SIZE));
+	glEnd();
+
+	glBegin(GL_QUADS);
+
+    	//Top face
+    	glColor3f(1.0f, 1.0f, 0.0f);
+    	glNormal3f(0.0, 1.0f, 0.0f);
+    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
+    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
+    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
+
+    	//Bottom face
+    	glColor3f(1.0f, 0.0f, 1.0f);
+    	glNormal3f(0.0, -1.0f, 0.0f);
+    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
+    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
+
+    	//Left face
+    	glNormal3f(-1.0, 0.0f, 0.0f);
+    	glColor3f(0.0f, 1.0f, 1.0f);
+    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
+    	glColor3f(0.0f, 0.0f, 1.0f);
+    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
+    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
+
+    	//Right face
+    	glNormal3f(1.0, 0.0f, 0.0f);
+    	glColor3f(1.0f, 0.0f, 0.0f);
+    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glColor3f(0.0f, 1.0f, 0.0f);
+    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
+    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
+
+	glEnd();
 
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureID);
-
-	//Bottom
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glColor3f(1.0f, 0.2f, 0.2f);
-	glBegin(GL_QUADS);
-
-	glNormal3f(0.0, 1.0f, 0.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-2.5f, -2.5f, 2.5f);
-	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(2.5f, -2.5f, 2.5f);
-	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(2.5f, -2.5f, -2.5f);
-	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(-2.5f, -2.5f, -2.5f);
-
-	glEnd();
-
-	//Back
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glColor3f(1.0f, 1.0f, 1.0f);
-	glBegin(GL_TRIANGLES);
 
-	glNormal3f(0.0f, 0.0f, 1.0f);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(-2.5f, -2.5f, -2.5f);
-	glTexCoord2f(5.0f, 5.0f);
-	glVertex3f(0.0f, 2.5f, -2.5f);
-	glTexCoord2f(10.0f, 0.0f);
-	glVertex3f(2.5f, -2.5f, -2.5f);
-
-	glEnd();
-
-	//Left
-	glDisable(GL_TEXTURE_2D);
-	glColor3f(1.0f, 0.7f, 0.3f);
 	glBegin(GL_QUADS);
 
-	glNormal3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(-2.5f, -2.5f, 2.5f);
-	glVertex3f(-2.5f, -2.5f, -2.5f);
-	glVertex3f(-2.5f, 2.5f, -2.5f);
-	glVertex3f(-2.5f, 2.5f, 2.5f);
+    	//Front face
+    	glNormal3f(0.0, 0.0f, 1.0f);
+    	glTexCoord2f(0.0f, 0.0f);
+    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
+    	glTexCoord2f(1.0f, 0.0f);
+    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
+    	glTexCoord2f(1.0f, 1.0f);
+    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
+    	glTexCoord2f(0.0f, 1.0f);
+    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
+
+    	//Back face
+    	glNormal3f(0.0, 0.0f, -1.0f);
+    	glTexCoord2f(0.0f, 0.0f);
+    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glTexCoord2f(1.0f, 0.0f);
+    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glTexCoord2f(1.0f, 1.0f);
+    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
+    	glTexCoord2f(0.0f, 1.0f);
+    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
 
 	glEnd();
+	glDisable(GL_TEXTURE_2D);
 
+    //printControls();
+
+    glFlush();
 	glutSwapBuffers();
 }
 

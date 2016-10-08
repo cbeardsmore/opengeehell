@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "imageloader.hpp"
+#include "stdbool.h"
 
 //---------------------------------------------------------------------------
 // OpenGL HEADER FILES, DEPENDING ON OS
