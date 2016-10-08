@@ -1,22 +1,28 @@
-# Makefile For OpenGL Assignment 2
+# Makefile for OpenGL Assignment 2
 # CG200 Assignment
-# Last Modified: 18/09/16
+# Last Modified: 07/10/16
 # Connor Beardsmore - 15504319
 
 # MAKE VARIABLES
 LATEX=*.aux,*.log,*.out,*.bbl,*.blg,*.bcf,*.toc,*.lot,*.lof,*.synctex.gz*,*.run.xml
-EXEC=sample
-OBJ=sample.o
-FRAMEWORK=-framework OpenGL -framework GLUT
+CC = g++
+CFLAGS = -Wall
+EXEC = cgass2
 DEPRECATED=-Wno-deprecated-declarations
+SRC = main.cpp
 
-# RULES + DEPENDENCIES
-$(EXEC) : $(OBJ)
-	gcc $(OBJ) -o $(EXEC) $(FRAMEWORK)
+# SET LIBS BASED ON OS 
+ifeq ($(shell uname),Darwin)
+	LIBS = -framework OpenGL -framework GLUT
+else
+	LIBS = -lglut
+endif
 
-sample.o : sample.c sample.h
-	gcc -c sample.c $(DEPRECATED)
+all: $(EXEC)
 
-clean :
-	rm -f -R $(EXEC) $(OBJ) *.gch
-	rm -f -R {$(LATEX)}
+$(EXEC) : $(SRC)
+	$(CC) $(CFLAGS) -o $(EXEC) $(SRC) $(LIBS) $(DEPRECATED)
+
+clean:
+	rm -f $(EXEC) $(LATEX) *.gch
+	rm -f -R documentation/{$(LATEX)}
