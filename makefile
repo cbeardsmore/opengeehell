@@ -9,7 +9,7 @@ CC = g++
 CFLAGS = -Wall
 EXEC = cgass2
 DEPRECATED=-Wno-deprecated-declarations
-SRC = main.cpp
+SRC = main.cpp imageloader.cpp
 
 # SET LIBS BASED ON OS 
 ifeq ($(shell uname),Darwin)

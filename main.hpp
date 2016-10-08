@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <math.h>
+#include "imageloader.hpp"
 
 //---------------------------------------------------------------------------
 // OpenGL HEADER FILES, DEPENDING ON OS
@@ -24,6 +25,7 @@
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES
 
+GLuint loadTexture(Image*);
 void init();
 void draw();
 void handleResize(int, int);

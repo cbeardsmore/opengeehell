@@ -12,6 +12,28 @@ using namespace std;
 
 float angle = 30.0f;
 float cameraAngle = 0.0f;
+GLuint textureID;
+
+
+//---------------------------------------------------------------------------
+// NAME: loadTexture()
+// IMPORT: image (Image*)
+// EXPORT: textureID (GLuint)
+// PURPOSE: Make image into texture and return the ID
+
+GLuint loadTexture( Image* image )
+{
+	GLuint textureId;
+    // Make room for texture
+	glGenTextures(1, &textureId);
+    // Bind given texture to edit it
+	glBindTexture(GL_TEXTURE_2D, textureId);
+	//Map image to texture
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,image->width, image->height,
+				           0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+
+	return textureId;
+}
 
 //---------------------------------------------------------------------------
 // FUNCTION: input()
@@ -53,9 +75,11 @@ void input(unsigned char key, int mouseX, int mouseY)
         case 'C':
         case 'c':   break;
         // Flat shaded polygonization
-        case 'p':   break;
+        case 'p':   glShadeModel( GL_FLAT );
+                    break;
         // Smooth shaded polygonization
-        case 'P':   break;
+        case 'P':   glShadeModel( GL_SMOOTH );
+                    break;
 	}
 }
 
@@ -68,6 +92,16 @@ void init()
     // Background color and enable depth testing
     glClearColor(0.7f, 0.9f, 1.0f, 1.0f);
 	glEnable( GL_DEPTH_TEST );
+    glEnable( GL_COLOR_MATERIAL );
+    glEnable( GL_LIGHTING );
+    glEnable( GL_LIGHT0 );
+    glEnable( GL_LIGHT1 );
+    glEnable( GL_NORMALIZE );
+    glShadeModel( GL_SMOOTH );
+
+    Image* image = loadBMP( "vtr.bmp" );
+    textureID = loadTexture( image );
+    delete image;
 }
 
 //---------------------------------------------------------------------------
@@ -79,7 +113,7 @@ void resize(int width, int height)
 	// Tell OpenGL to convert from coordinates to pixel values
 	glViewport(0, 0, width, height);
     // Switch to setting camera perspective
-	glMatrixMode(GL_PROJECTION);
+	glMatrixMode( GL_PROJECTION );
 
     // Reset camera
 	glLoadIdentity(); //Reset the camera
@@ -94,77 +128,73 @@ void resize(int width, int height)
 //Draws the 3D scene
 void display()
 {
-	// Clear last draw ingormation
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Switch to drawing perspective
 	glMatrixMode(GL_MODELVIEW);
-    // Reset drawing perspective
-	glLoadIdentity();
-    glRotatef(-cameraAngle, 0.0f, 1.0f, 0.0f);
-	glTranslatef(0.0f, 0.0f, -5.0f);
+    glLoadIdentity();
 
-	glPushMatrix();
-	glTranslatef(0.0f, -1.0f, 0.0f);
-	glRotatef(angle, 0.0f, 0.0f, 1.0f);
+	glTranslatef(0.0f, 1.0f, -6.0f);
 
+	GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 1.0f};
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+
+	GLfloat directedLight[] = {0.7f, 0.7f, 0.7f, 1.0f};
+	GLfloat directedLightPos[] = {-10.0f, 15.0f, 20.0f, 0.0f};
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, directedLight);
+	glLightfv(GL_LIGHT0, GL_POSITION, directedLightPos);
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+
+	//Bottom
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glColor3f(1.0f, 0.2f, 0.2f);
 	glBegin(GL_QUADS);
 
-	//Trapezoid
-	glColor3f(0.5f, 0.0f, 0.8f);
-	glVertex3f(-0.7f, -0.5f, 0.0f);
-	glColor3f(0.0f, 0.9f, 0.0f);
-	glVertex3f(0.7f, -0.5f, 0.0f);
-	glColor3f(1.0f, 0.0f, 0.0f);
-	glVertex3f(0.4f, 0.5f, 0.0f);
-	glColor3f(0.0f, 0.65f, 0.65f);
-	glVertex3f(-0.4f, 0.5f, 0.0f);
+	glNormal3f(0.0, 1.0f, 0.0f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-2.5f, -2.5f, 2.5f);
+	glTexCoord2f(1.0f, 0.0f);
+	glVertex3f(2.5f, -2.5f, 2.5f);
+	glTexCoord2f(1.0f, 1.0f);
+	glVertex3f(2.5f, -2.5f, -2.5f);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(-2.5f, -2.5f, -2.5f);
 
 	glEnd();
 
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(1.0f, 1.0f, 0.0f);
-	glRotatef(angle, 0.0f, 1.0f, 0.0f);
-	glScalef(0.7f, 0.7f, 0.7f);
-
-	glBegin(GL_TRIANGLES);
-	glColor3f(0.0f, 0.75f, 0.0f);
-
-	//Pentagon
-	glVertex3f(-0.5f, -0.5f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.0f);
-	glVertex3f(-0.5f, 0.0f, 0.0f);
-
-	glVertex3f(-0.5f, 0.0f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.0f);
-	glVertex3f(0.5f, 0.0f, 0.0f);
-
-	glVertex3f(-0.5f, 0.0f, 0.0f);
-	glVertex3f(0.5f, 0.0f, 0.0f);
-	glVertex3f(0.0f, 0.5f, 0.0f);
-
-	glEnd();
-
-	glPopMatrix();
-	glPushMatrix();
-	glTranslatef(-1.0f, 1.0f, 0.0f);
-	glRotatef(angle, 1.0f, 2.0f, 3.0f);
-
-	glBegin(GL_TRIANGLES);
-
-	//Triangle
-	glColor3f(1.0f, 0.7f, 0.0f);
-	glVertex3f(0.5f, -0.5f, 0.0f);
+	//Back
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glColor3f(1.0f, 1.0f, 1.0f);
-	glVertex3f(0.0f, 0.5f, 0.0f);
-	glColor3f(0.0f, 0.0f, 1.0f);
-	glVertex3f(-0.5f, -0.5f, 0.0f);
+	glBegin(GL_TRIANGLES);
+
+	glNormal3f(0.0f, 0.0f, 1.0f);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(-2.5f, -2.5f, -2.5f);
+	glTexCoord2f(5.0f, 5.0f);
+	glVertex3f(0.0f, 2.5f, -2.5f);
+	glTexCoord2f(10.0f, 0.0f);
+	glVertex3f(2.5f, -2.5f, -2.5f);
 
 	glEnd();
 
-	glPopMatrix();
-    // Send 3D scene to screen
+	//Left
+	glDisable(GL_TEXTURE_2D);
+	glColor3f(1.0f, 0.7f, 0.3f);
+	glBegin(GL_QUADS);
+
+	glNormal3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(-2.5f, -2.5f, 2.5f);
+	glVertex3f(-2.5f, -2.5f, -2.5f);
+	glVertex3f(-2.5f, 2.5f, -2.5f);
+	glVertex3f(-2.5f, 2.5f, 2.5f);
+
+	glEnd();
+
 	glutSwapBuffers();
 }
 
