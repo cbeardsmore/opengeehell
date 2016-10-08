@@ -7,11 +7,11 @@
 LATEX=*.aux,*.log,*.out,*.bbl,*.blg,*.bcf,*.toc,*.lot,*.lof,*.synctex.gz*,*.run.xml
 CC = g++
 CFLAGS = -Wall
-EXEC = cgass2
+EXEC = opengeehell
 DEPRECATED=-Wno-deprecated-declarations
 SRC = main.cpp imageloader.cpp
 
-# SET LIBS BASED ON OS 
+# SET LIBS BASED ON OS
 ifeq ($(shell uname),Darwin)
 	LIBS = -framework OpenGL -framework GLUT
 else

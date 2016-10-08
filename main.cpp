@@ -9,21 +9,15 @@
 
 #include "main.hpp"
 using namespace std;
-#define	CUBE_SIZE 20.0
-#define zoomIncrement 0.1
 
-float angle = 30.0f;
-float cameraAngle = 0.0f;
-GLuint textureID;
-const float BOX_SIZE = 7.0f;
-int paused = 1;
+//---------------------------------------------------------------------------
 
-GLfloat zoom = zoomIncrement;
-GLfloat xRot;
-GLfloat yRot;
-GLfloat xAngle;
-GLfloat yAngle;
-GLfloat speed;
+// Global variables
+GLuint textureID;       // ID of a given texture
+GLfloat zoom;           // Zoom level
+GLfloat xAngle;         // X rotation angle
+GLfloat yAngle;         // Y rotation angle
+GLfloat speed;          // Speed of animation
 
 //---------------------------------------------------------------------------
 // NAME: loadTexture()
@@ -41,7 +35,6 @@ GLuint loadTexture( Image* image )
 	//Map image to texture
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,image->width, image->height,
 				           0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
-
 	return textureId;
 }
 
@@ -62,12 +55,12 @@ void input(unsigned char key, int mouseX, int mouseY)
         // Zoom in 0.1
         case 'Z':
             if (zoom < 3.0f)
-    			zoom += zoomIncrement;
+    			zoom += ZOOM_INCREMENT;
             break;
         //Zoom out 0.1
         case 'z':
             if (zoom > 0.2f)
-                zoom -= zoomIncrement;
+                zoom -= ZOOM_INCREMENT;
             break;
         // X rotation
         case 'X':
@@ -82,7 +75,7 @@ void input(unsigned char key, int mouseX, int mouseY)
         // Animation
         case 'A':
         case 'a':
-            paused = 0;
+            paused = false;
             if ( speed < 0.01 )
                 speed += 0.01;
         // Faster
@@ -100,19 +93,21 @@ void input(unsigned char key, int mouseX, int mouseY)
         // Pause
         case 'T':
         case 't':
-            paused = 1;
+            paused = true;
             break;
         // Resume
         case 'C':
         case 'c':
-            paused = 0;
+            paused = false;
             break;
         // Flat shaded polygonization
-        case 'p':   glShadeModel( GL_FLAT );
-                    break;
+        case 'p':
+            glShadeModel( GL_FLAT );
+            break;
         // Smooth shaded polygonization
-        case 'P':   glShadeModel( GL_SMOOTH );
-                    break;
+        case 'P':
+            glShadeModel( GL_SMOOTH );
+            break;
 	}
 }
 
@@ -122,6 +117,15 @@ void input(unsigned char key, int mouseX, int mouseY)
 
 void init()
 {
+    // Variable initialisation
+    zoom = ZOOM_INCREMENT * 5.0;
+    angle = 30.0f;
+    cameraAngle = 0.0f;
+    BOX_SIZE = 7.0f;
+    paused = true;
+    xRot = false;
+    yRot = false;
+
     // Background color and enable depth testing
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable( GL_DEPTH_TEST );
@@ -131,7 +135,7 @@ void init()
     glEnable( GL_LIGHT1 );
     glEnable( GL_NORMALIZE );
 
-    // Shading model
+    // Shading model, smooth by default
     glShadeModel( GL_SMOOTH );
 
     // Load textures
@@ -141,17 +145,17 @@ void init()
 }
 
 //---------------------------------------------------------------------------
-// NAME: GLPrint()
+// NAME: GLprint()
 // IMPORT: text (char*), inX (float), inY (float)
 // PURPOE: Draw line of text at given coordinates
 
-void GLPrint(const char* text, float inX, float inY)
+void GLprint(const char* text, float inX, float inY)
 {
 	int i;
 	int length = strlen(text);
 
 	glColor3f(1.0,1.0,1.0);
-	glRasterPos3f(inX,inY,-15.0f);
+	glRasterPos3f(inX,inY,0.0f);
 	glPushMatrix();
 
 	// Print one char at a time over the entire string
@@ -169,17 +173,18 @@ void printControls()
 {
     glDisable(GL_LIGHTING);
 	glPushMatrix();
-		glRotatef(-15.0f,1.0f,0.0f,0.0f);
-
-		GLPrint("Input:",-15.0,12.0);
-		GLPrint("<z>/<Z> : Zooms in/out",-15.0,11.0);
-		GLPrint("<x>/<X> : X-axis rotation clock/anti-clockwise",-15.0,10.0);
-		GLPrint("<y>/<Y> : Y-axis rotation clock/anti-clockwise",-15.0,9.0);
-		GLPrint("<p>/<P> : Turn on Smooth/Flat Shading",-15.0,8.0);
-		GLPrint("<a>/<A> : Start animation",-15.0,7.0);
-		GLPrint("<t>/<T> : Pause animation",-15.0,6.0);
-		GLPrint("<c>/<C> : Resume Animation",-15.0,5.0);
-		GLPrint("<Esc> : Quit the program",-15.0,4.0);
+        float xCo = -13.3;
+        float yCo = 7.6;
+        float ySep = 0.7;
+		GLprint("Input:", xCo, yCo);
+		GLprint("<z>/<Z> : Zooms in/out", xCo, yCo - ySep);
+		GLprint("<x>/<X> : X-axis rotation clock/anti-clockwise", xCo, yCo - 2.0 * ySep);
+		GLprint("<y>/<Y> : Y-axis rotation clock/anti-clockwise", xCo, yCo - 3.0 * ySep);
+		GLprint("<p>/<P> : Turn on Smooth/Flat Shading", xCo, yCo - 4.0 *  ySep);
+		GLprint("<a>/<A> : Start animation", xCo, yCo - 5.0 * ySep);
+		GLprint("<t>/<T> : Pause animation", xCo, yCo - 6.0 * ySep);
+		GLprint("<c>/<C> : Resume Animation", xCo, yCo - 7.0 * ySep);
+		GLprint("<Esc> : Quit the program", xCo, yCo - 8.0 * ySep);
 	glPopMatrix();
 	glEnable(GL_LIGHTING);
 }
@@ -214,25 +219,46 @@ void display()
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+    // Pulls "camera out" to see the scene
 	glTranslatef(0.0f, 0.0f, -20.0f);
-    glScalef( zoom, zoom, zoom );
 
+    // Print text to screen, outside of pushed matrix
+    printControls();
 
-    if ( xRot )
-        xAngle += 0.5;
-    if ( yRot )
-        yAngle += 0.5;
-
-    glRotatef( xAngle, 0.0f, 1.0f, 0.0f );
-    glRotatef( yAngle, 1.0f, 0.0f, 0.0f );
-
-
+    // Lighting
 	GLfloat ambientLight[] = {0.3f, 0.3f, 0.3f, 1.0f};
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 	GLfloat lightColor[] = {0.7f, 0.7f, 0.7f, 1.0f};
 	GLfloat lightPos[] = {-2 * BOX_SIZE, BOX_SIZE, 4 * BOX_SIZE, 1.0f};
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+
+    // Call draw to draw the objects into the scene
+    glPushMatrix();
+        glScalef( zoom, zoom, zoom );
+        draw();
+    glPopMatrix();
+
+    // Forces task completion and swaps the double buffers over
+    glFlush();
+    glutSwapBuffers();
+}
+
+//---------------------------------------------------------------------------
+// NAME: draw()
+// PURPOSE: Draw objects into the 3D scene
+
+void draw()
+{
+    // If rotations are true, rotate by additional angle increment
+    if ( xRot )
+        xAngle += ANGLE_INCREMENT;
+    if ( yRot )
+        yAngle += ANGLE_INCREMENT;
+
+    // X and Y rotations based on angles
+    glRotatef( xAngle, 0.0f, 1.0f, 0.0f );
+    glRotatef( yAngle, 1.0f, 0.0f, 0.0f );
 
     // Lines to show the 3 axis on the screen for reference
 	glBegin(GL_LINES);
@@ -319,12 +345,6 @@ void display()
     	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
 
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
-
-    //printControls();
-
-    glFlush();
-	glutSwapBuffers();
 }
 
 //---------------------------------------------------------------------------
@@ -346,7 +366,7 @@ int main(int argc, char** argv)
 	//Initialize GLUT and Window
 	glutInit( &argc, argv );
 	glutInitDisplayMode( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
-	glutInitWindowSize(400, 400);
+	glutInitWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT );
     glutInitWindowPosition(100, 100);
 
 	//Create the window

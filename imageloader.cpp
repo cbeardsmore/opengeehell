@@ -20,23 +20,26 @@
  * www.videotutorialsrock.com
  */
 
+//---------------------------------------------------------------------------
 
 #include <assert.h>
 #include <fstream>
-
 #include "imageloader.hpp"
-
 using namespace std;
 
-Image::Image(char* ps, int w, int h) : pixels(ps), width(w), height(h) {
+//---------------------------------------------------------------------------
 
-}
+// Constructor
+Image::Image(char* ps, int w, int h) : pixels(ps), width(w), height(h) {}
 
-Image::~Image() {
-	delete[] pixels;
-}
+//---------------------------------------------------------------------------
 
-namespace {
+// Destructor
+Image::~Image() { delete[] pixels; }
+
+//---------------------------------------------------------------------------
+namespace
+{
 	//Converts a four-character array to an integer, using little-endian form
 	int toInt(const char* bytes) {
 		return (int)(((unsigned char)bytes[3] << 24) |
@@ -45,11 +48,15 @@ namespace {
 					 (unsigned char)bytes[0]);
 	}
 
+//---------------------------------------------------------------------------
+
 	//Converts a two-character array to a short, using little-endian form
 	short toShort(const char* bytes) {
 		return (short)(((unsigned char)bytes[1] << 8) |
 					   (unsigned char)bytes[0]);
 	}
+
+//---------------------------------------------------------------------------
 
 	//Reads the next four bytes as an integer, using little-endian form
 	int readInt(ifstream &input) {
@@ -58,12 +65,16 @@ namespace {
 		return toInt(buffer);
 	}
 
+//---------------------------------------------------------------------------
+
 	//Reads the next two bytes as a short, using little-endian form
 	short readShort(ifstream &input) {
 		char buffer[2];
 		input.read(buffer, 2);
 		return toShort(buffer);
 	}
+
+//---------------------------------------------------------------------------
 
 	//Just like auto_ptr, but for arrays
 	template<class T>
@@ -131,7 +142,14 @@ namespace {
 	};
 }
 
-Image* loadBMP(const char* filename) {
+//---------------------------------------------------------------------------
+// NAME: loadBMP()
+// IMPORT: filename (char*)
+// EXPORT: image (Image*)
+// PURPOSE: Load a BMP file into an Image object for processing
+
+Image* loadBMP(const char* filename)
+{
 	ifstream input;
 	input.open(filename, ifstream::binary);
 	assert(!input.fail() || !"Could not find file");
@@ -196,5 +214,8 @@ Image* loadBMP(const char* filename) {
 	}
 
 	input.close();
-	return new Image(pixels2.release(), width, height);
+    Image* image = new Image(pixels2.release(), width, height);
+	return image;
+
+//---------------------------------------------------------------------------
 }
