@@ -10,13 +10,16 @@
 #include "main.hpp"
 using namespace std;
 
+float angle = 30.0f;
+float cameraAngle = 0.0f;
+
 //---------------------------------------------------------------------------
 // FUNCTION: input()
-// IMPORT: key (char), x (int), y (int)
+// IMPORT: key (char), mouseX (int), mouseY (int)
 // PURPOSE: Callback when key pressed
 
 //Called when a key is pressed
-void input(unsigned char key, int mouseC, int mouseY)
+void input(unsigned char key, int mouseX, int mouseY)
 {
 	switch (key)
     {
@@ -64,7 +67,7 @@ void init()
 {
     // Background color and enable depth testing
     glClearColor( 0.0, 0.0, 0.0, 0.0 );
-	glEnable(GL_DEPTH_TEST);
+	glEnable( GL_DEPTH_TEST );
 }
 
 //---------------------------------------------------------------------------
@@ -101,6 +104,7 @@ void display()
 
     // Begin quad coordinates
 	glBegin(GL_QUADS);
+    glColor3f(0.5f, 0.0f, 0.8f);    
     	glVertex3f(-0.7f, -1.5f, -5.0f);
     	glVertex3f(0.7f, -1.5f, -5.0f);
     	glVertex3f(0.4f, -0.5f, -5.0f);
@@ -109,6 +113,7 @@ void display()
 
     // Begin triangle coordinates
 	glBegin(GL_TRIANGLES);
+        glColor3f(0.0f, 0.75f, 0.0f);
     	//Pentagon
     	glVertex3f(0.5f, 0.5f, -5.0f);
     	glVertex3f(1.5f, 0.5f, -5.0f);
@@ -121,7 +126,10 @@ void display()
     	glVertex3f(0.5f, 1.0f, -5.0f);
     	glVertex3f(1.5f, 1.0f, -5.0f);
     	glVertex3f(1.0f, 1.5f, -5.0f);
+    glEnd();
 
+    glColor3f(0.0f, 0.65f, 0.65f);
+    glBegin(GL_TRIANGLES);
     	//Triangle
     	glVertex3f(-0.5f, 0.5f, -5.0f);
     	glVertex3f(-1.0f, 1.5f, -5.0f);
