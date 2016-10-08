@@ -66,7 +66,7 @@ void input(unsigned char key, int mouseX, int mouseY)
 void init()
 {
     // Background color and enable depth testing
-    glClearColor( 0.0, 0.0, 0.0, 0.0 );
+    glClearColor(0.7f, 0.9f, 1.0f, 1.0f);
 	glEnable( GL_DEPTH_TEST );
 }
 
@@ -101,41 +101,69 @@ void display()
 	glMatrixMode(GL_MODELVIEW);
     // Reset drawing perspective
 	glLoadIdentity();
+    glRotatef(-cameraAngle, 0.0f, 1.0f, 0.0f);
+	glTranslatef(0.0f, 0.0f, -5.0f);
 
-    // Begin quad coordinates
+	glPushMatrix();
+	glTranslatef(0.0f, -1.0f, 0.0f);
+	glRotatef(angle, 0.0f, 0.0f, 1.0f);
+
 	glBegin(GL_QUADS);
-    glColor3f(0.5f, 0.0f, 0.8f);    
-    	glVertex3f(-0.7f, -1.5f, -5.0f);
-    	glVertex3f(0.7f, -1.5f, -5.0f);
-    	glVertex3f(0.4f, -0.5f, -5.0f);
-    	glVertex3f(-0.4f, -0.5f, -5.0f);
+
+	//Trapezoid
+	glColor3f(0.5f, 0.0f, 0.8f);
+	glVertex3f(-0.7f, -0.5f, 0.0f);
+	glColor3f(0.0f, 0.9f, 0.0f);
+	glVertex3f(0.7f, -0.5f, 0.0f);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glVertex3f(0.4f, 0.5f, 0.0f);
+	glColor3f(0.0f, 0.65f, 0.65f);
+	glVertex3f(-0.4f, 0.5f, 0.0f);
+
 	glEnd();
 
-    // Begin triangle coordinates
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(1.0f, 1.0f, 0.0f);
+	glRotatef(angle, 0.0f, 1.0f, 0.0f);
+	glScalef(0.7f, 0.7f, 0.7f);
+
 	glBegin(GL_TRIANGLES);
-        glColor3f(0.0f, 0.75f, 0.0f);
-    	//Pentagon
-    	glVertex3f(0.5f, 0.5f, -5.0f);
-    	glVertex3f(1.5f, 0.5f, -5.0f);
-    	glVertex3f(0.5f, 1.0f, -5.0f);
+	glColor3f(0.0f, 0.75f, 0.0f);
 
-    	glVertex3f(0.5f, 1.0f, -5.0f);
-    	glVertex3f(1.5f, 0.5f, -5.0f);
-    	glVertex3f(1.5f, 1.0f, -5.0f);
+	//Pentagon
+	glVertex3f(-0.5f, -0.5f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.0f);
+	glVertex3f(-0.5f, 0.0f, 0.0f);
 
-    	glVertex3f(0.5f, 1.0f, -5.0f);
-    	glVertex3f(1.5f, 1.0f, -5.0f);
-    	glVertex3f(1.0f, 1.5f, -5.0f);
-    glEnd();
+	glVertex3f(-0.5f, 0.0f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.0f);
+	glVertex3f(0.5f, 0.0f, 0.0f);
 
-    glColor3f(0.0f, 0.65f, 0.65f);
-    glBegin(GL_TRIANGLES);
-    	//Triangle
-    	glVertex3f(-0.5f, 0.5f, -5.0f);
-    	glVertex3f(-1.0f, 1.5f, -5.0f);
-    	glVertex3f(-1.5f, 0.5f, -5.0f);
+	glVertex3f(-0.5f, 0.0f, 0.0f);
+	glVertex3f(0.5f, 0.0f, 0.0f);
+	glVertex3f(0.0f, 0.5f, 0.0f);
+
 	glEnd();
 
+	glPopMatrix();
+	glPushMatrix();
+	glTranslatef(-1.0f, 1.0f, 0.0f);
+	glRotatef(angle, 1.0f, 2.0f, 3.0f);
+
+	glBegin(GL_TRIANGLES);
+
+	//Triangle
+	glColor3f(1.0f, 0.7f, 0.0f);
+	glVertex3f(0.5f, -0.5f, 0.0f);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glVertex3f(0.0f, 0.5f, 0.0f);
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glVertex3f(-0.5f, -0.5f, 0.0f);
+
+	glEnd();
+
+	glPopMatrix();
     // Send 3D scene to screen
 	glutSwapBuffers();
 }
