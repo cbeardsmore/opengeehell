@@ -13,7 +13,8 @@ using namespace std;
 //---------------------------------------------------------------------------
 
 // Global variables
-GLuint textureID;       // ID of a given texture
+GLuint textureID1;
+GLuint textureID2;
 GLfloat zoom;           // Zoom level
 GLfloat xAngle;         // X rotation angle
 GLfloat yAngle;         // Y rotation angle
@@ -33,8 +34,8 @@ GLuint loadTexture( Image* image )
     // Bind given texture to edit it
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	//Map image to texture
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,image->width, image->height,
-				           0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->width, image->height,
+				                0, GL_RGB, GL_UNSIGNED_BYTE, image->pixels);
 	return textureId;
 }
 
@@ -108,6 +109,11 @@ void input(unsigned char key, int mouseX, int mouseY)
         case 'P':
             glShadeModel( GL_SMOOTH );
             break;
+        // Reset all scene
+        case 'r':
+        case 'R':
+            reset();
+            break;
 	}
 }
 
@@ -119,6 +125,7 @@ void init()
 {
     // Variable initialisation
     zoom = ZOOM_INCREMENT * 5.0;
+    speed = 0.1f;
     angle = 30.0f;
     cameraAngle = 0.0f;
     BOX_SIZE = 7.0f;
@@ -127,7 +134,7 @@ void init()
     yRot = false;
 
     // Background color and enable depth testing
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor( BACKGROUND_COLOR );
 	glEnable( GL_DEPTH_TEST );
     glEnable( GL_COLOR_MATERIAL );
     glEnable( GL_LIGHTING );
@@ -138,10 +145,17 @@ void init()
     // Shading model, smooth by default
     glShadeModel( GL_SMOOTH );
 
-    // Load textures
-    Image* image = loadBMP( "vtr.bmp" );
-    textureID = loadTexture( image );
+    // Load bitmaps into images
+    Image* image = loadBMP( "./textures/vtr.bmp" );
+    Image* image2 = loadBMP( "./textures/water.bmp" );
+
+    // Load images into textures
+    textureID1 = loadTexture( image );
+    textureID2 = loadTexture( image2 );
+
+    // Delete image objects
     delete image;
+    delete image2;
 }
 
 //---------------------------------------------------------------------------
@@ -154,14 +168,14 @@ void GLprint(const char* text, float inX, float inY)
 	int i;
 	int length = strlen(text);
 
-	glColor3f(1.0,1.0,1.0);
+    // Set colour to white and set raster position to print to
+	glColor3f( WHITE );
 	glRasterPos3f(inX,inY,0.0f);
+
+    // Print one char at a time over the entire string
 	glPushMatrix();
-
-	// Print one char at a time over the entire string
-	for(i=0; i < length; i++)
-		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, text[i]);
-
+    	for(i=0; i < length; i++)
+    		glutBitmapCharacter(GLUT_BITMAP_8_BY_13, text[i]);
 	glPopMatrix();
 }
 
@@ -173,20 +187,54 @@ void printControls()
 {
     glDisable(GL_LIGHTING);
 	glPushMatrix();
+
+        // Formatting and location of text fields
         float xCo = -13.3;
         float yCo = 7.6;
-        float ySep = 0.7;
-		GLprint("Input:", xCo, yCo);
-		GLprint("<z>/<Z> : Zooms in/out", xCo, yCo - ySep);
-		GLprint("<x>/<X> : X-axis rotation clock/anti-clockwise", xCo, yCo - 2.0 * ySep);
-		GLprint("<y>/<Y> : Y-axis rotation clock/anti-clockwise", xCo, yCo - 3.0 * ySep);
-		GLprint("<p>/<P> : Turn on Smooth/Flat Shading", xCo, yCo - 4.0 *  ySep);
-		GLprint("<a>/<A> : Start animation", xCo, yCo - 5.0 * ySep);
-		GLprint("<t>/<T> : Pause animation", xCo, yCo - 6.0 * ySep);
-		GLprint("<c>/<C> : Resume Animation", xCo, yCo - 7.0 * ySep);
-		GLprint("<Esc> : Quit the program", xCo, yCo - 8.0 * ySep);
+        float ySep = 0.5;
+        int numControls = 11;
+
+        const char* controls[numControls];
+        controls[0] = "Key Functions";
+        controls[1] = "-------------";
+        controls[2] = "<Z>: Zoom In";
+        controls[3] = "<z>: Zoom Out";
+        controls[4] = "<x><X>: X Rotation";
+        controls[5] = "<y><Y>: Y Rotation";
+        controls[6] = "<p>: Flat Shaded Polygonization";
+        controls[7] = "<P>: Smooth Shaded Polygonization";
+        controls[8] = "<a><A>: Start Animation";
+        controls[8] = "<a><A>: Pause Animation";
+        controls[8] = "<a><A>: Resume Animation";
+        controls[9] = "<r><R>: Reset All";
+        controls[10] = "<Esc>: Quit Program";
+
+        // Actual text printed to the screen
+        for ( int ii = 0; ii < numControls; ii++ )
+            GLprint( controls[ii], xCo, yCo - ( (float)ii * ySep ) );
+
 	glPopMatrix();
 	glEnable(GL_LIGHTING);
+}
+
+//---------------------------------------------------------------------------
+// NAME: reset()
+// PURPOSE: Reset scene to original settings
+
+void reset()
+{
+    // Reset all global variables
+    zoom = ZOOM_INCREMENT * 5.0;
+    speed = 0.1f;
+    paused = true;
+    xRot = false;
+    yRot = false;
+
+    // Inverse X and Y rotations and reset angle back to 0
+    glRotatef( -xAngle, 0.0f, 1.0f, 0.0f );
+    glRotatef( -yAngle, 1.0f, 0.0f, 0.0f );
+    xAngle = 0;
+    yAngle = 0;
 }
 
 //---------------------------------------------------------------------------
@@ -234,6 +282,7 @@ void display()
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
 
     // Call draw to draw the objects into the scene
+    // Scale all objects by the "zoom" factor
     glPushMatrix();
         glScalef( zoom, zoom, zoom );
         draw();
@@ -260,91 +309,25 @@ void draw()
     glRotatef( xAngle, 0.0f, 1.0f, 0.0f );
     glRotatef( yAngle, 1.0f, 0.0f, 0.0f );
 
-    // Lines to show the 3 axis on the screen for reference
-	glBegin(GL_LINES);
-        // X LINE IS RED
-        glColor3f( 1.0, 0.0, 0.0 );
-		glVertex3f( -(2.0*CUBE_SIZE), 0, 0);
-		glVertex3f(  (2.0*CUBE_SIZE), 0, 0);
-        // Y LINE IS GREEEN
-        glColor3f( 0.0, 1.0, 0.0 );
-		glVertex3f( 0, -(2.0*CUBE_SIZE), 0);
-		glVertex3f( 0,  (2.0*CUBE_SIZE), 0);
-        // Z LINE IS BLUE
-        glColor3f( 0.0, 0.0, 1.0 );
-		glVertex3f( 0, 0, -(2.0*CUBE_SIZE));
-		glVertex3f( 0, 0,  (2.0*CUBE_SIZE));
-	glEnd();
+    // Disable bitmaps and textures for all following items
+    glDisable(GL_TEXTURE_2D);
 
-	glBegin(GL_QUADS);
+    // Draw objects in the scene
+    drawFloor( textureID2 );
+    drawAxis();
 
-    	//Top face
-    	glColor3f(1.0f, 1.0f, 0.0f);
-    	glNormal3f(0.0, 1.0f, 0.0f);
-    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
-    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
-    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
+    // Utah Teapots for the lols
+    glPushMatrix();
+        glColor3f( RED );
+        glTranslatef( 20.0f, -15.0f, -40.0f );
+        glutSolidTeapot(3.0);
+    glPopMatrix();
+    glPushMatrix();
+        glColor3f( GREEN );
+        glTranslatef( 30.0f, -15.0f, -30.0f );
+        glutWireTeapot(3.0);
+    glPopMatrix();
 
-    	//Bottom face
-    	glColor3f(1.0f, 0.0f, 1.0f);
-    	glNormal3f(0.0, -1.0f, 0.0f);
-    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
-    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
-
-    	//Left face
-    	glNormal3f(-1.0, 0.0f, 0.0f);
-    	glColor3f(0.0f, 1.0f, 1.0f);
-    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
-    	glColor3f(0.0f, 0.0f, 1.0f);
-    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
-    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
-
-    	//Right face
-    	glNormal3f(1.0, 0.0f, 0.0f);
-    	glColor3f(1.0f, 0.0f, 0.0f);
-    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glColor3f(0.0f, 1.0f, 0.0f);
-    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
-    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
-
-	glEnd();
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureID);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glColor3f(1.0f, 1.0f, 1.0f);
-
-	glBegin(GL_QUADS);
-
-    	//Front face
-    	glNormal3f(0.0, 0.0f, 1.0f);
-    	glTexCoord2f(0.0f, 0.0f);
-    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
-    	glTexCoord2f(1.0f, 0.0f);
-    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, BOX_SIZE / 2);
-    	glTexCoord2f(1.0f, 1.0f);
-    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
-    	glTexCoord2f(0.0f, 1.0f);
-    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, BOX_SIZE / 2);
-
-    	//Back face
-    	glNormal3f(0.0, 0.0f, -1.0f);
-    	glTexCoord2f(0.0f, 0.0f);
-    	glVertex3f(-BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glTexCoord2f(1.0f, 0.0f);
-    	glVertex3f(-BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glTexCoord2f(1.0f, 1.0f);
-    	glVertex3f(BOX_SIZE / 2, BOX_SIZE / 2, -BOX_SIZE / 2);
-    	glTexCoord2f(0.0f, 1.0f);
-    	glVertex3f(BOX_SIZE / 2, -BOX_SIZE / 2, -BOX_SIZE / 2);
-
-	glEnd();
 }
 
 //---------------------------------------------------------------------------
@@ -371,6 +354,7 @@ int main(int argc, char** argv)
 
 	//Create the window
 	glutCreateWindow( "Under The Sea - CG Assignment 2" );
+
     // Initialise rendering
 	init();
 

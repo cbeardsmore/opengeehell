@@ -12,18 +12,20 @@
 #include <math.h>
 #include "imageloader.hpp"
 #include "stdbool.h"
+#include "floor.hpp"
+#include "axis.hpp"
 
 //---------------------------------------------------------------------------
+//CONSTANTS
 
-#define	CUBE_SIZE 20.0
 #define ANGLE_INCREMENT 0.5
 #define ZOOM_INCREMENT 0.1
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 600
 
 //---------------------------------------------------------------------------
+//GLOBAL VARIABLES
 
-//Global variables
 float angle;
 float cameraAngle;
 float BOX_SIZE;
@@ -49,6 +51,7 @@ void input(unsigned char, int, int);
 void init();
 void GLprint(char*, float, float);
 void printControls();
+void reset();
 void resize(int, int);
 void display();
 void draw();
