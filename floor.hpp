@@ -21,6 +21,14 @@
 
 #define FLOORSPAN 2000.0
 
+static GLfloat floorVertices[4][3] =
+{
+    { -FLOORSPAN, 0.0, FLOORSPAN },
+    { FLOORSPAN, 0.0, FLOORSPAN },
+    { FLOORSPAN, 0.0, -FLOORSPAN },
+    { -FLOORSPAN, 0.0, -FLOORSPAN },
+};
+
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 

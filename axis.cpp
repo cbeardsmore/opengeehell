@@ -20,16 +20,16 @@ void drawAxis()
         glBegin(GL_LINES);
             // X LINE IS RED
             glColor3f( RED );
-            glVertex3f( -(2.0*LINE_SPAN), 0, 0);
-            glVertex3f(  (2.0*LINE_SPAN), 0, 0);
+            glVertex3f( -LINE_SPAN, 0, 0 );
+            glVertex3f(  LINE_SPAN, 0, 0 );
             // Y LINE IS GREEEN
             glColor3f( GREEN );
-            glVertex3f( 0, -(2.0*LINE_SPAN), 0);
-            glVertex3f( 0,  (2.0*LINE_SPAN), 0);
+            glVertex3f( 0, -LINE_SPAN, 0 );
+            glVertex3f( 0,  LINE_SPAN, 0 );
             // Z LINE IS BLUE
             glColor3f( BLUE );
-            glVertex3f( 0, 0, -(2.0*LINE_SPAN));
-            glVertex3f( 0, 0,  (2.0*LINE_SPAN));
+            glVertex3f( 0, 0, -LINE_SPAN );
+            glVertex3f( 0, 0,  LINE_SPAN );
         glEnd();
     glPopMatrix();
 }

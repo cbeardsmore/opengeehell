@@ -4,7 +4,7 @@
 *  UNIT: CG200 Assignment S2 - 2016
 *  PURPOSE: OpenGL
 *  LAST MOD: 19/09/16
-*  REQUIRES: NONE
+*  REQUIRES: main.hpp
 ***************************************************************************/
 
 #include "main.hpp"

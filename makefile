@@ -18,11 +18,14 @@ else
 	LIBS = -lglut
 endif
 
-all: $(EXEC)
+all : $(EXEC)
 
 $(EXEC) : $(SRC)
 	$(CC) $(CFLAGS) -o $(EXEC) $(SRC) $(LIBS) $(DEPRECATED)
 
-clean:
+run:
+	./$(EXEC)
+
+clean :
 	rm -f $(EXEC) $(LATEX) *.gch
 	rm -f -R documentation/{$(LATEX)}

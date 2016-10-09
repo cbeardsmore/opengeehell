@@ -4,7 +4,7 @@
 *  UNIT: CG200 Assignment S2 - 2016
 *  PURPOSE: Header file for floor.cpp
 *  LAST MOD: 07/10/16
-*  REQUIRES: OpenGL.h, glut.h
+*  REQUIRES: OpenGL.h, glut.h, colors.hpp
 ***************************************************************************/
 
 // OpenGL HEADER FILES, DEPENDING ON OS
@@ -21,7 +21,7 @@
 //---------------------------------------------------------------------------
 // CONSTANTS
 
-#define LINE_SPAN 200.0f
+#define LINE_SPAN 400.0f
 
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES

@@ -3,8 +3,9 @@
 *  AUTHOR: Connor Beardsmore - 15504319
 *  UNIT: CG200 Assignment S2 - 2016
 *  PURPOSE: Function prototypes for main.h
-*  LAST MOD: 07/10/16
-*  REQUIRES: NONE
+*  LAST MOD: 10/10/16
+*  REQUIRES: iostream, stdlib.h, math.h, imageloader.hpp, stdbool.h,
+*            floor.hpp, axis.hpp
 ***************************************************************************/
 
 #include <iostream>
@@ -14,6 +15,16 @@
 #include "stdbool.h"
 #include "floor.hpp"
 #include "axis.hpp"
+
+//---------------------------------------------------------------------------
+// OpenGL HEADER FILES, DEPENDING ON OS
+
+#ifdef __APPLE__
+    #include <OpenGL/OpenGL.h>
+    #include <GLUT/glut.h>
+#else
+    #include <GL/glut.h>
+#endif
 
 //---------------------------------------------------------------------------
 //CONSTANTS
@@ -32,16 +43,6 @@ float BOX_SIZE;
 bool paused;
 bool xRot;
 bool yRot;
-
-//---------------------------------------------------------------------------
-// OpenGL HEADER FILES, DEPENDING ON OS
-
-#ifdef __APPLE__
-    #include <OpenGL/OpenGL.h>
-    #include <GLUT/glut.h>
-#else
-    #include <GL/glut.h>
-#endif
 
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES

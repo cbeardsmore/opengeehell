@@ -16,16 +16,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-/* File for "Textures" lesson of the OpenGL tutorial on
- * www.videotutorialsrock.com
- */
-
 //---------------------------------------------------------------------------
 
 class Image
 {
 	public:
-		Image(char* ps, int w, int h);
+		Image( char* ps, int w, int h );
 		~Image();
 
         // Array of form R1,G1,B1,R2,G2,B2 for color of each image pixel
@@ -38,6 +34,6 @@ class Image
 
 //---------------------------------------------------------------------------
 
-Image* loadBMP(const char* filename);
+Image* loadBMP( const char* );
 
 //---------------------------------------------------------------------------
