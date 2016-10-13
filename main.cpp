@@ -13,8 +13,8 @@ using namespace std;
 //---------------------------------------------------------------------------
 
 // Global variables
-GLuint textureID1;
-GLuint textureID2;
+GLuint floorTexture;
+GLuint anchorTexture;
 GLfloat zoom;           // Zoom level
 GLfloat xAngle;         // X rotation angle
 GLfloat yAngle;         // Y rotation angle
@@ -139,19 +139,38 @@ void init()
     glEnable( GL_COLOR_MATERIAL );
     glEnable( GL_LIGHTING );
     glEnable( GL_LIGHT0 );
-    glEnable( GL_LIGHT1 );
     glEnable( GL_NORMALIZE );
+
+    // Allows us to set ambient + diffuse default via GL_COLOR
+    glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
+
+    // Lighting
+    GLfloat lightPos[] = {10.0f, 10.0f, 0.0f, 1.0};
+    GLfloat lightColor[] = { RED , 1.0f};
+	GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 1.0f};
+    GLfloat ambience[] = {0.0f, 0.0f, 0.0f, 1.0f};
+    GLfloat diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
+
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
+	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, ambience);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
+
+
 
     // Shading model, smooth by default
     glShadeModel( GL_SMOOTH );
 
     // Load bitmaps into images
-    Image* image = loadBMP( "./textures/vtr.bmp" );
-    Image* image2 = loadBMP( "./textures/water.bmp" );
+    Image* image = loadBMP( "./textures/water.bmp" );
+    Image* image2 = loadBMP( "./textures/g.bmp" );
 
     // Load images into textures
-    textureID1 = loadTexture( image );
-    textureID2 = loadTexture( image2 );
+    floorTexture = loadTexture( image );
+    anchorTexture = loadTexture( image2 );
 
     // Delete image objects
     delete image;
@@ -273,14 +292,6 @@ void display()
     // Print text to screen, outside of pushed matrix
     printControls();
 
-    // Lighting
-	GLfloat ambientLight[] = {0.3f, 0.3f, 0.3f, 1.0f};
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
-	GLfloat lightColor[] = {0.7f, 0.7f, 0.7f, 1.0f};
-	GLfloat lightPos[] = {-2 * BOX_SIZE, BOX_SIZE, 4 * BOX_SIZE, 1.0f};
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
-	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-
     // Call draw to draw the objects into the scene
     // Scale all objects by the "zoom" factor
     glPushMatrix();
@@ -313,8 +324,9 @@ void draw()
     glDisable(GL_TEXTURE_2D);
 
     // Draw objects in the scene
-    drawFloor( textureID2 );
+    drawFloor( floorTexture );
     drawAxis();
+    drawAnchor( 20 );
 
     // Utah Teapots for the lols
     glPushMatrix();

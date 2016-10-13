@@ -12,6 +12,6 @@
 #define RED   1.0f, 0.0f, 0.0f
 #define GREEN 0.0f, 1.0f, 0.0f
 #define BLUE  0.0f, 0.0f, 1.0f
+#define GREY  0.3f, 0.3f, 0.3f
 #define BACKGROUND_COLOR 0.0f, 0.0f, 112.0f, 1.0f
-
 //---------------------------------------------------------------------------

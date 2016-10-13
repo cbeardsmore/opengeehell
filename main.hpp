@@ -15,6 +15,7 @@
 #include "stdbool.h"
 #include "floor.hpp"
 #include "axis.hpp"
+#include "anchor.hpp"
 
 //---------------------------------------------------------------------------
 // OpenGL HEADER FILES, DEPENDING ON OS
