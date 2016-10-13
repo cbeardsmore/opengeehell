@@ -1,9 +1,9 @@
 /***************************************************************************
-*  FILE: anchor.hpp
+*  FILE: teapot.hpp
 *  AUTHOR: Connor Beardsmore - 15504319
 *  UNIT: CG200 Assignment S2 - 2016
-*  PURPOSE: Header file for anchor.cpp
-*  LAST MOD: 12/10/16
+*  PURPOSE: Header file for teapot.cpp
+*  LAST MOD: 07/10/16
 *  REQUIRES: OpenGL.h, glut.h
 ***************************************************************************/
 
@@ -21,6 +21,6 @@
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 
-void drawAnchor(int,double,double,double);
+void drawTeapot(char,double,double,double);
 
 //---------------------------------------------------------------------------

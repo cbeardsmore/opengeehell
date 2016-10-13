@@ -19,6 +19,7 @@ GLfloat zoom;           // Zoom level
 GLfloat xAngle;         // X rotation angle
 GLfloat yAngle;         // Y rotation angle
 GLfloat speed;          // Speed of animation
+GLfloat teapotRise;
 
 //---------------------------------------------------------------------------
 // NAME: loadTexture()
@@ -83,13 +84,13 @@ void input(unsigned char key, int mouseX, int mouseY)
         case 'F':
         case 'f':
             if ( speed < 1 )
-                speed += 0.01;
+                speed += 0.05;
             break;
         // Slower
         case 'S':
         case 's':
             if ( speed >= 0.01 )
-                speed -= 0.01;
+                speed -= 0.05;
             break;
         // Pause
         case 'T':
@@ -252,6 +253,7 @@ void reset()
     glRotatef( -yAngle, 1.0f, 0.0f, 0.0f );
     xAngle = 0;
     yAngle = 0;
+    teapotRise = 0.0;
 }
 
 //---------------------------------------------------------------------------
@@ -314,6 +316,9 @@ void draw()
     if ( yRot )
         yAngle += ANGLE_INCREMENT;
 
+    if ( !paused )
+        teapotRise += speed * 0.1;
+
     // X and Y rotations based on angles
     glRotatef( xAngle, 0.0f, 1.0f, 0.0f );
     glRotatef( yAngle, 1.0f, 0.0f, 0.0f );
@@ -324,20 +329,11 @@ void draw()
     // Draw objects in the scene
     drawFloor( floorTexture );
     drawAxis();
-    drawAnchor( 20 );
+    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0 );
+    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0 );
     drawRocks();
-
-    // Utah Teapots for the lols
-    glPushMatrix();
-        glColor3f( RED );
-        glTranslatef( 20.0f, -15.0f, -40.0f );
-        glutSolidTeapot(3.0);
-    glPopMatrix();
-    glPushMatrix();
-        glColor3f( GREEN );
-        glTranslatef( 30.0f, -15.0f, -30.0f );
-        glutWireTeapot(3.0);
-    glPopMatrix();
+    drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0 );
+    drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0 );
 
 }
 

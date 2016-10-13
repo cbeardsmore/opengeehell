@@ -9,7 +9,7 @@ CC = g++
 CFLAGS = -Wall
 EXEC = opengeehell
 DEPRECATED=-Wno-deprecated-declarations
-SRC = main.cpp imageloader.cpp floor.cpp axis.cpp anchor.cpp rocks.cpp
+SRC = main.cpp imageloader.cpp floor.cpp axis.cpp anchor.cpp rocks.cpp teapot.cpp
 
 # SET LIBS BASED ON OS
 ifeq ($(shell uname),Darwin)
