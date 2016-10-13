@@ -1,8 +1,8 @@
 /***************************************************************************
-*  FILE: anchor.hpp
+*  FILE: rocks.hpp
 *  AUTHOR: Connor Beardsmore - 15504319
 *  UNIT: CG200 Assignment S2 - 2016
-*  PURPOSE: Header file for anchor.cpp
+*  PURPOSE: Header file for rocks.cpp
 *  LAST MOD: 12/10/16
 *  REQUIRES: OpenGL.h, glut.h
 ***************************************************************************/
@@ -21,6 +21,6 @@
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 
-void drawAnchor(int);
+void drawRocks();
 
 //---------------------------------------------------------------------------

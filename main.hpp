@@ -16,6 +16,7 @@
 #include "floor.hpp"
 #include "axis.hpp"
 #include "anchor.hpp"
+#include "rocks.hpp"
 
 //---------------------------------------------------------------------------
 // OpenGL HEADER FILES, DEPENDING ON OS

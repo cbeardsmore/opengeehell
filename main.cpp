@@ -159,8 +159,6 @@ void init()
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
-
-
     // Shading model, smooth by default
     glShadeModel( GL_SMOOTH );
 
@@ -327,6 +325,7 @@ void draw()
     drawFloor( floorTexture );
     drawAxis();
     drawAnchor( 20 );
+    drawRocks();
 
     // Utah Teapots for the lols
     glPushMatrix();
