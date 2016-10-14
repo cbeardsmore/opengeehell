@@ -11,17 +11,6 @@
 using namespace std;
 
 //---------------------------------------------------------------------------
-
-// Global variables
-GLuint floorTexture;
-GLuint anchorTexture;
-GLfloat zoom;           // Zoom level
-GLfloat xAngle;         // X rotation angle
-GLfloat yAngle;         // Y rotation angle
-GLfloat speed;          // Speed of animation
-GLfloat teapotRise;
-
-//---------------------------------------------------------------------------
 // NAME: loadTexture()
 // IMPORT: image (Image*)
 // EXPORT: textureID (GLuint)
@@ -57,12 +46,18 @@ void input(unsigned char key, int mouseX, int mouseY)
         // Zoom in 0.1
         case 'Z':
             if (zoom < 3.0f)
+            {
     			zoom += ZOOM_INCREMENT;
+                detail++;
+            }
             break;
         //Zoom out 0.1
         case 'z':
             if (zoom > 0.2f)
+            {
                 zoom -= ZOOM_INCREMENT;
+                detail--;
+            }
             break;
         // X rotation
         case 'X':
@@ -133,6 +128,7 @@ void init()
     paused = true;
     xRot = false;
     yRot = false;
+    detail = 10;
 
     // Background color and enable depth testing
     glClearColor( BACKGROUND_COLOR );
@@ -145,16 +141,14 @@ void init()
     // Allows us to set ambient + diffuse default via GL_COLOR
     glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
 
-    // Lighting
+    // Lighting position + colours
     GLfloat lightPos[] = {10.0f, 10.0f, 0.0f, 1.0};
-    GLfloat lightColor[] = { RED , 1.0f};
-	GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 1.0f};
+	GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 0.5f};
     GLfloat ambience[] = {0.0f, 0.0f, 0.0f, 1.0f};
-    GLfloat diffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat diffuse[] = {0.3f, 0.3f, 1.0f, 1.0f};
     GLfloat specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lightColor);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambience);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -164,7 +158,7 @@ void init()
     glShadeModel( GL_SMOOTH );
 
     // Load bitmaps into images
-    Image* image = loadBMP( "./textures/water.bmp" );
+    Image* image = loadBMP( "./textures/dirt.bmp" );
     Image* image2 = loadBMP( "./textures/g.bmp" );
 
     // Load images into textures
@@ -247,6 +241,7 @@ void reset()
     paused = true;
     xRot = false;
     yRot = false;
+    detail = 10;
 
     // Inverse X and Y rotations and reset angle back to 0
     glRotatef( -xAngle, 0.0f, 1.0f, 0.0f );
@@ -329,11 +324,12 @@ void draw()
     // Draw objects in the scene
     drawFloor( floorTexture );
     drawAxis();
-    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0 );
-    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0 );
-    drawRocks();
+    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0, anchorTexture, detail );
+    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0, anchorTexture, detail );
+    drawRocks( detail );
     drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0 );
     drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0 );
+    drawFlag( -50.0f, 28.0f, -105.0f, detail );
 
 }
 

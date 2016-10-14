@@ -18,6 +18,7 @@
 #include "anchor.hpp"
 #include "rocks.hpp"
 #include "teapot.hpp"
+#include "flag.hpp"
 
 //---------------------------------------------------------------------------
 // OpenGL HEADER FILES, DEPENDING ON OS
@@ -46,6 +47,18 @@ float BOX_SIZE;
 bool paused;
 bool xRot;
 bool yRot;
+
+//ANIMATION + ROTATIONS
+GLfloat zoom;           // Zoom level
+GLfloat xAngle;         // X rotation angle
+GLfloat yAngle;         // Y rotation angle
+GLfloat speed;          // Speed of animation
+GLfloat teapotRise;
+GLuint detail;
+
+//TEXTURE IDS
+GLuint floorTexture;
+GLuint anchorTexture;
 
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES

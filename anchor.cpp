@@ -13,7 +13,7 @@
 // NAME: drawAnchor();
 // PURPOSE: Draw chain of anchor + anchor head
 
-void drawAnchor( int pairs, double xStart, double yStart, double zStart )
+void drawAnchor( int pairs, double xStart, double yStart, double zStart, GLuint textureID, int detail )
 {
         // RED TEAPOT CHAIN
         for ( int jj = 0; jj < pairs; jj++ )
@@ -25,7 +25,7 @@ void drawAnchor( int pairs, double xStart, double yStart, double zStart )
                 glScalef( 0.35f, 1.0f, 0.35f );
                 if ( jj % 2 == 0 )
                     glRotatef( 80.0f, 0.0f, 1.0f, 0.0f );
-                glutSolidTorus( 1.2f, 3.0f, 10, 10);
+                glutSolidTorus( 1.2f, 3.0f, detail, detail);
 
             glPopMatrix();
         }

@@ -16,11 +16,9 @@
     #include <GL/glut.h>
 #endif
 
-#include "colors.hpp"
-
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 
-void drawRocks(int);
+void drawFlag(double,double,double,int);
 
 //---------------------------------------------------------------------------

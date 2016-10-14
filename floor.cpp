@@ -38,7 +38,7 @@ void drawFloor( GLuint textureID )
             glTexCoord2f(1600.0, 0.0);
             glVertex3fv(floorVertices[3]);
         glEnd();
-        
+
         glEnable(GL_LIGHTING);
         glDisable(GL_TEXTURE_2D);
 
