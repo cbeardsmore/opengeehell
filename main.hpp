@@ -54,6 +54,7 @@ GLfloat xAngle;         // X rotation angle
 GLfloat yAngle;         // Y rotation angle
 GLfloat speed;          // Speed of animation
 GLfloat teapotRise;
+GLfloat flagFall;
 GLuint detail;
 
 //TEXTURE IDS

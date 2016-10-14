@@ -129,6 +129,8 @@ void init()
     xRot = false;
     yRot = false;
     detail = 10;
+    teapotRise = 0.0;
+    flagFall = 0.0;
 
     // Background color and enable depth testing
     glClearColor( BACKGROUND_COLOR );
@@ -136,25 +138,42 @@ void init()
     glEnable( GL_COLOR_MATERIAL );
     glEnable( GL_LIGHTING );
     glEnable( GL_LIGHT0 );
+    glEnable( GL_LIGHT1 );
     glEnable( GL_NORMALIZE );
+
+    // Transparency
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Allows us to set ambient + diffuse default via GL_COLOR
     glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
 
-    // Lighting position + colours
+    // GLOBAL AMBEINT LIGHTING
+    GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 0.5f};
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
+
+    // FIRST LIGHT GL_LIGHT0
     GLfloat lightPos[] = {10.0f, 10.0f, 0.0f, 1.0};
-	GLfloat ambientLight[] = {0.2f, 0.2f, 0.2f, 0.5f};
     GLfloat ambience[] = {0.0f, 0.0f, 0.0f, 1.0f};
     GLfloat diffuse[] = {0.3f, 0.3f, 1.0f, 1.0f};
     GLfloat specular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambientLight);
 	glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambience);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
-    // Shading model, smooth by default
+
+    // SECOND LIGHT GL_LIGHT1
+    GLfloat lightPos2[] = {-40.0f, 0.0f, -90.0f, 1.0};
+    GLfloat ambience2[] = {0.0f, 0.0f, 0.2f, 1.0f};
+    GLfloat diffuse2[] = {0.3f, 0.3f, 1.0f, 1.0f};
+    GLfloat specular2[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    glLightfv(GL_LIGHT1, GL_POSITION, lightPos2);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, ambience2);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse2);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, specular2);
+
+    // SHADING MODEL
     glShadeModel( GL_SMOOTH );
 
     // Load bitmaps into images
@@ -249,6 +268,7 @@ void reset()
     xAngle = 0;
     yAngle = 0;
     teapotRise = 0.0;
+    flagFall = 0.0;
 }
 
 //---------------------------------------------------------------------------
@@ -312,7 +332,10 @@ void draw()
         yAngle += ANGLE_INCREMENT;
 
     if ( !paused )
+    {
         teapotRise += speed * 0.1;
+        flagFall += speed * 0.05;
+    }
 
     // X and Y rotations based on angles
     glRotatef( xAngle, 0.0f, 1.0f, 0.0f );
@@ -326,10 +349,20 @@ void draw()
     drawAxis();
     drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0, anchorTexture, detail );
     drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0, anchorTexture, detail );
-    drawRocks( detail );
+    drawRocks( detail, floorTexture );
     drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0 );
     drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0 );
-    drawFlag( -50.0f, 28.0f, -105.0f, detail );
+    drawFlag( -50.0f, 28.0f - flagFall, -105.0f, detail );
+
+
+
+    glPushMatrix();
+        glTranslatef( 0.0f, 0.0f, -100.0f );
+        glColor4f( 0.0f, 1.0f, 0.0f, 0.6f );
+        gluSphere( gluNewQuadric(), 10, 2*detail, 2*detail );
+    glPopMatrix();
+
+
 
 }
 
