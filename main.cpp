@@ -141,9 +141,10 @@ void init()
     glEnable( GL_LIGHT1 );
     glEnable( GL_NORMALIZE );
 
-    // Transparency
+    // Transaprency + FOG
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_FOG);
 
     // Allows us to set ambient + diffuse default via GL_COLOR
     glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
@@ -343,6 +344,14 @@ void draw()
 
     // Disable bitmaps and textures for all following items
     glDisable(GL_TEXTURE_2D);
+
+
+    // FOG
+    GLfloat fogColor[] = {0.5f, 0.5f, 0.5f, 1};
+    glFogfv(GL_FOG_COLOR, fogColor);
+    glFogi(GL_FOG_MODE, GL_LINEAR);
+    glFogf(GL_FOG_START, 0.0f);
+    glFogf(GL_FOG_END, 200.0f);
 
     // Draw objects in the scene
     drawFloor( floorTexture );
