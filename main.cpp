@@ -347,7 +347,7 @@ void draw()
 
 
     // FOG
-    GLfloat fogColor[] = {0.5f, 0.5f, 0.5f, 1};
+    GLfloat fogColor[] = {0.0f, 0.0f, 1.0f, 1};
     glFogfv(GL_FOG_COLOR, fogColor);
     glFogi(GL_FOG_MODE, GL_LINEAR);
     glFogf(GL_FOG_START, 0.0f);
