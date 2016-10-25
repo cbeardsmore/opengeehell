@@ -13,6 +13,8 @@
 \usepackage{float}
 \usepackage{hyperref}
 \usepackage{transparent}
+\usepackage[style=chicago-authordate,backend=biber]{biblatex}
+
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -22,7 +24,12 @@
 \rfoot{\thepage}
 
 \pagenumbering{arabic}
-\graphicspath{{../images/}}
+\graphicspath{{./images/}}
+
+\addbibresource{./references.bib}
+\nocite{*}
+
+
 
 %-------------------------------------------------------------------------------
 \begin{document}
@@ -91,8 +98,9 @@ adsdsaadsa
 
 %-------------------------------------------------------------------------------
 
-\section*{References}
-adsdsaadsa
+\break
+\setlength\bibitemsep{4\itemsep}
+\printbibliography
 
 %-------------------------------------------------------------------------------
 \end{document}   
