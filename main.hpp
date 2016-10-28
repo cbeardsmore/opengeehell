@@ -19,6 +19,7 @@
 #include "rocks.hpp"
 #include "teapot.hpp"
 #include "flag.hpp"
+#include "bubbles.hpp"
 
 //---------------------------------------------------------------------------
 // OpenGL HEADER FILES, DEPENDING ON OS
@@ -55,6 +56,8 @@ GLfloat yAngle;         // Y rotation angle
 GLfloat speed;          // Speed of animation
 GLfloat teapotRise;
 GLfloat flagFall;
+GLfloat bubbRise;
+GLfloat bubbMove;
 GLuint detail;
 
 //TEXTURE IDS

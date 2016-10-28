@@ -86,6 +86,8 @@ void input(unsigned char key, int mouseX, int mouseY)
         case 's':
             if ( speed >= 0.01 )
                 speed -= 0.05;
+            if ( speed < 0.001 )
+                paused = true;
             break;
         // Pause
         case 'T':
@@ -131,6 +133,8 @@ void init()
     detail = 10;
     teapotRise = 0.0;
     flagFall = 0.0;
+    bubbRise = 0.0;
+    bubbMove = 0.0;
 
     // Background color and enable depth testing
     glClearColor( BACKGROUND_COLOR );
@@ -273,6 +277,8 @@ void reset()
     yAngle = 0;
     teapotRise = 0.0;
     flagFall = 0.0;
+    bubbRise = 0.0;
+    bubbMove = 0.0;
 }
 
 //---------------------------------------------------------------------------
@@ -339,6 +345,8 @@ void draw()
     {
         teapotRise += speed * 0.1;
         flagFall += speed * 0.05;
+        bubbRise += speed * 0.5;
+        bubbMove += sin(bubbRise) / 10.0;
     }
 
     // X and Y rotations based on angles
@@ -347,7 +355,6 @@ void draw()
 
     // Disable bitmaps and textures for all following items
     glDisable(GL_TEXTURE_2D);
-
 
     // FOG
     GLfloat fogColor[] = {0.0f, 0.0f, 1.0f, 1};
@@ -365,16 +372,8 @@ void draw()
     drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0, rockTexture );
     drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0, rockTexture );
     drawFlag( -50.0f, 28.0f - flagFall, -105.0f, detail );
-
-
-    glPushMatrix();
-        glTranslatef( 0.0f, 0.0f, -100.0f );
-        glColor4f( 0.0f, 1.0f, 0.0f, 0.6f );
-        gluSphere( gluNewQuadric(), 10, 2*detail, 2*detail );
-    glPopMatrix();
-
-
-
+    drawBubbles( 0.0f+bubbMove, 0.0f+bubbRise, -10.0f, detail );
+    printf("%lf\n", bubbMove);
 }
 
 //---------------------------------------------------------------------------
