@@ -373,7 +373,6 @@ void draw()
     drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0, rockTexture );
     drawFlag( -50.0f, 28.0f - flagFall, -105.0f, detail );
     drawBubbles( 0.0f+bubbMove, 0.0f+bubbRise, -10.0f, detail );
-    printf("%lf\n", bubbMove);
 }
 
 //---------------------------------------------------------------------------
