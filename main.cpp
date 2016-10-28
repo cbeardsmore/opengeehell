@@ -135,6 +135,7 @@ void init()
     flagFall = 0.0;
     bubbRise = 0.0;
     bubbMove = 0.0;
+    bubbBack = 0.0;
 
     // Background color and enable depth testing
     glClearColor( BACKGROUND_COLOR );
@@ -279,6 +280,7 @@ void reset()
     flagFall = 0.0;
     bubbRise = 0.0;
     bubbMove = 0.0;
+    bubbBack = 0.0;
 }
 
 //---------------------------------------------------------------------------
@@ -346,7 +348,8 @@ void draw()
         teapotRise += speed * 0.1;
         flagFall += speed * 0.05;
         bubbRise += speed * 0.5;
-        bubbMove += sin(bubbRise) / 10.0;
+        bubbMove += speed*0.3;
+        bubbBack += speed*0.9;
     }
 
     // X and Y rotations based on angles
@@ -372,7 +375,8 @@ void draw()
     drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0, rockTexture );
     drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0, rockTexture );
     drawFlag( -50.0f, 28.0f - flagFall, -105.0f, detail );
-    drawBubbles( 0.0f+bubbMove, 0.0f+bubbRise, -10.0f, detail );
+    drawBubbles( -25.0f+bubbMove, -15.0f+bubbRise, -10.0f-bubbBack, detail );
+
 }
 
 //---------------------------------------------------------------------------

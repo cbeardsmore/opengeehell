@@ -58,6 +58,7 @@ GLfloat teapotRise;
 GLfloat flagFall;
 GLfloat bubbRise;
 GLfloat bubbMove;
+GLfloat bubbBack;
 GLuint detail;
 
 //TEXTURE IDS
