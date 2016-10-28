@@ -21,6 +21,6 @@
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 
-void drawTeapot(char,double,double,double,GLuint);
+void drawTeapot(char,double,double,double,GLuint,GLfloat);
 
 //---------------------------------------------------------------------------

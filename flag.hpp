@@ -19,6 +19,6 @@
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 
-void drawFlag(double,double,double,int);
+void drawFlag(double,double,double,int,GLuint);
 
 //---------------------------------------------------------------------------

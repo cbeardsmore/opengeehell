@@ -13,7 +13,7 @@
 // NAME: drawAnchor();
 // PURPOSE: Draw chain of anchor + anchor head
 
-void drawAnchor( int pairs, double xStart, double yStart, double zStart, int detail )
+void drawAnchor( int pairs, double xStart, double yStart, double zStart, int detail, GLfloat rotation )
 {
     glPushMatrix();
 
@@ -25,7 +25,9 @@ void drawAnchor( int pairs, double xStart, double yStart, double zStart, int det
                 glTranslatef( xStart, ( yStart + 5.0f * (double)jj ), zStart );
                 glScalef( 0.35f, 1.0f, 0.35f );
                 if ( jj % 2 == 0 )
-                    glRotatef( 80.0f, 0.0f, 1.0f, 0.0f );
+                    glRotatef( 80.0f+rotation, 0.0f, 1.0f, 0.0f );
+                else
+                    glRotatef( rotation, 0.0f, 1.0f, 0.0f );
                 glutSolidTorus( 1.2f, 3.0f, detail, detail);
             glPopMatrix();
         }

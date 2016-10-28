@@ -65,6 +65,8 @@ GLuint detail;
 GLuint floorTexture;
 GLuint anchorTexture;
 GLuint rockTexture;
+GLuint flagTexture;
+GLuint chainRotation;
 
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES

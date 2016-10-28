@@ -136,6 +136,7 @@ void init()
     bubbRise = 0.0;
     bubbMove = 0.0;
     bubbBack = 0.0;
+    chainRotation = 0;
 
     // Background color and enable depth testing
     glClearColor( BACKGROUND_COLOR );
@@ -170,10 +171,10 @@ void init()
 
 
     // SECOND LIGHT GL_LIGHT1
-    GLfloat lightPos2[] = {-40.0f, 0.0f, -90.0f, 1.0};
+    GLfloat lightPos2[] = {-40.0f, 10.0f, -30.0f, 1.0};
     GLfloat ambience2[] = {0.0f, 0.0f, 0.2f, 1.0f};
-    GLfloat diffuse2[] = {0.3f, 0.3f, 1.0f, 1.0f};
-    GLfloat specular2[] = {1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat diffuse2[] = {0.3f, 1.0f, 1.0f, 1.0f};
+    GLfloat specular2[] = {0.0f, 1.0f, 0.0f, 1.0f};
     glLightfv(GL_LIGHT1, GL_POSITION, lightPos2);
     glLightfv(GL_LIGHT1, GL_AMBIENT, ambience2);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, diffuse2);
@@ -186,16 +187,20 @@ void init()
     Image* image = loadBMP( "./textures/dirt.bmp" );
     Image* image2 = loadBMP( "./textures/g.bmp" );
     Image* image3 = loadBMP( "./textures/rock.bmp" );
+    Image* image4 = loadBMP( "./textures/flag.bmp" );
+
 
     // Load images into textures
     floorTexture = loadTexture( image );
     anchorTexture = loadTexture( image2 );
     rockTexture = loadTexture( image3 );
+    flagTexture = loadTexture( image4 );
 
     // Delete image objects
     delete image;
     delete image2;
     delete image3;
+    delete image4;
 }
 
 //---------------------------------------------------------------------------
@@ -281,6 +286,7 @@ void reset()
     bubbRise = 0.0;
     bubbMove = 0.0;
     bubbBack = 0.0;
+    chainRotation = 0;
 }
 
 //---------------------------------------------------------------------------
@@ -347,9 +353,10 @@ void draw()
     {
         teapotRise += speed * 0.1;
         flagFall += speed * 0.05;
-        bubbRise += speed * 0.5;
-        bubbMove += speed*0.3;
+        bubbRise += speed * 0.2;
+        bubbMove += speed*0.1;
         bubbBack += speed*0.9;
+        chainRotation += speed*5.0;
     }
 
     // X and Y rotations based on angles
@@ -364,17 +371,17 @@ void draw()
     glFogfv(GL_FOG_COLOR, fogColor);
     glFogi(GL_FOG_MODE, GL_LINEAR);
     glFogf(GL_FOG_START, 0.0f);
-    glFogf(GL_FOG_END, 200.0f);
+    glFogf(GL_FOG_END, 150.0f);
 
     // Draw objects in the scene
     drawFloor( floorTexture );
     drawAxis();
-    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0, detail );
-    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0, detail );
+    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0, detail, chainRotation );
+    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0, detail, chainRotation );
     drawRocks( detail, rockTexture );
-    drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0, rockTexture );
-    drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0, rockTexture );
-    drawFlag( -50.0f, 28.0f - flagFall, -105.0f, detail );
+    drawTeapot( 'S', 29.5, -9.0 + teapotRise, -50.0, rockTexture, chainRotation );
+    drawTeapot( 'W', 39.5, -9.0 + teapotRise, -40.0, rockTexture, chainRotation );
+    drawFlag( -50.0f, 28.0f - flagFall, -105.0f, detail, flagTexture );
     drawBubbles( -25.0f+bubbMove, -15.0f+bubbRise, -10.0f-bubbBack, detail );
 
 }

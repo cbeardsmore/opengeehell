@@ -14,9 +14,15 @@
 // NAME: drawAnchor();
 // PURPOSE: Draw chain of anchor + anchor head
 
-void drawFlag( double xStart, double yStart, double zStart, int detail )
+void drawFlag( double xStart, double yStart, double zStart, int detail, GLuint textureID )
 {
     glPushMatrix();
+
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glDisable(GL_LIGHTING);
 
         glTranslatef( xStart, yStart, zStart );
 
@@ -40,16 +46,23 @@ void drawFlag( double xStart, double yStart, double zStart, int detail )
         //FLAG BOX
         glPushMatrix();
             glRotatef( 70.0f, 0.0f, 0.0f, 1.0f );
-            glColor3f( 1.0f, 0.0f, 0.0f );
+            glColor3f( 1.0f, 1.0f, 1.0f );
             glScalef( 12.0f, 18.0f, 1.0f );
             glTranslatef( -1.0f, -1.0f, 0.0f );
             glBegin(GL_QUADS);
+                glTexCoord2f(0.0, 0.0);
                 glVertex3f(0.0f, 0.0f, 0.0f);
+                glTexCoord2f(0.0, 1.0);
                 glVertex3f(0.0f, 1.0f, 0.0f);
-                glVertex3f(1.0f, 0.0f, 0.0f);
+                glTexCoord2f(1.0, 1.0);
                 glVertex3f(1.0f, 1.0f, 0.0f);
+                glTexCoord2f(1.0, 0.0);
+                glVertex3f(1.0f, 0.0f, 0.0f);
             glEnd();
         glPopMatrix();
+
+        glEnable(GL_LIGHTING);
+        glDisable(GL_TEXTURE_2D);
 
     glPopMatrix();
 }

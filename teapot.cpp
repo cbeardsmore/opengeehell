@@ -13,7 +13,7 @@
 // NAME: drawTeapot();
 // PURPOSE: Draw chain of anchor + anchor head
 
-void drawTeapot( char type, double xStart, double yStart, double zStart, GLuint textureID)
+void drawTeapot( char type, double xStart, double yStart, double zStart, GLuint textureID, GLfloat rotation)
 {
     // Utah Teapots
     glPushMatrix();
@@ -25,7 +25,8 @@ void drawTeapot( char type, double xStart, double yStart, double zStart, GLuint 
 
         glColor3f( GOLD );
         glTranslatef( xStart, yStart, zStart );
-        glRotatef( -60.0f, 0.0f, 0.0f, 1.0f );
+        glRotatef( rotation, 0.0f, 1.0f, 0.0f );
+        glRotatef( -90.0f, 0.0f, 0.0f, 1.0f );
         glScalef( 2.0f, 2.0f, 2.0f );
 
         GLfloat materialSpecular[] = {0.5f, 0.5f, 0.5f, 1.0f};

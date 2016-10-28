@@ -21,6 +21,6 @@
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 
-void drawAnchor(int,double,double,double,int);
+void drawAnchor(int,double,double,double,int,GLfloat);
 
 //---------------------------------------------------------------------------
