@@ -29,11 +29,15 @@ void drawTeapot( char type, double xStart, double yStart, double zStart, GLuint 
         glRotatef( -90.0f, 0.0f, 0.0f, 1.0f );
         glScalef( 2.0f, 2.0f, 2.0f );
 
-        GLfloat materialSpecular[] = {0.5f, 0.5f, 0.5f, 1.0f};
-        GLfloat materialEmission[] = {0.1f, 0.1f, 0.1f, 1.0f};
-        glMaterialfv(GL_FRONT, GL_SPECULAR, materialSpecular);
-        glMaterialfv(GL_FRONT, GL_EMISSION, materialEmission);
-        glMaterialf(GL_FRONT, GL_SHININESS, 40);
+        float mat_ambient[] ={ 0.329412f, 0.223529f, 0.027451f,1.0f };
+        float mat_diffuse[] ={ 0.780392f, 0.568627f, 0.113725f, 1.0f };
+        float mat_specular[] ={ 0.992157f, 0.941176f, 0.807843f, 1.0f };
+        float shine = 27.8974f;
+
+        glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambient);
+        glMaterialfv(GL_FRONT, GL_SPECULAR, mat_specular);
+        glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_diffuse);
+        glMaterialf(GL_FRONT, GL_SHININESS, shine);
 
         if ( type == 'S' )
             glutSolidTeapot(3.0);
@@ -43,7 +47,6 @@ void drawTeapot( char type, double xStart, double yStart, double zStart, GLuint 
         glDisable(GL_TEXTURE_2D);
 
     glPopMatrix();
-
 }
 
 //---------------------------------------------------------------------------

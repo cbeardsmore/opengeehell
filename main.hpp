@@ -15,11 +15,12 @@
 #include "stdbool.h"
 #include "floor.hpp"
 #include "axis.hpp"
-#include "anchor.hpp"
+#include "chain.hpp"
 #include "rocks.hpp"
 #include "teapot.hpp"
 #include "flag.hpp"
 #include "bubbles.hpp"
+#include "anchor.hpp"
 
 //---------------------------------------------------------------------------
 // OpenGL HEADER FILES, DEPENDING ON OS
@@ -59,14 +60,15 @@ GLfloat flagFall;
 GLfloat bubbRise;
 GLfloat bubbMove;
 GLfloat bubbBack;
+GLuint chainRotation;
 GLuint detail;
 
 //TEXTURE IDS
 GLuint floorTexture;
-GLuint anchorTexture;
+GLuint chainTexture;
 GLuint rockTexture;
 GLuint flagTexture;
-GLuint chainRotation;
+GLuint anchorTexture;
 
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES

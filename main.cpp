@@ -74,7 +74,7 @@ void input(unsigned char key, int mouseX, int mouseY)
         case 'a':
             paused = false;
             if ( speed < 0.01 )
-                speed += 0.01;
+                speed += 0.02;
         // Faster
         case 'F':
         case 'f':
@@ -169,7 +169,6 @@ void init()
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
 
-
     // SECOND LIGHT GL_LIGHT1
     GLfloat lightPos2[] = {-40.0f, 10.0f, -30.0f, 1.0};
     GLfloat ambience2[] = {0.0f, 0.0f, 0.2f, 1.0f};
@@ -188,19 +187,21 @@ void init()
     Image* image2 = loadBMP( "./textures/g.bmp" );
     Image* image3 = loadBMP( "./textures/rock.bmp" );
     Image* image4 = loadBMP( "./textures/flag.bmp" );
-
+    Image* image5 = loadBMP( "./textures/wood.bmp" );
 
     // Load images into textures
     floorTexture = loadTexture( image );
-    anchorTexture = loadTexture( image2 );
+    chainTexture = loadTexture( image2 );
     rockTexture = loadTexture( image3 );
     flagTexture = loadTexture( image4 );
+    anchorTexture = loadTexture( image5 );
 
     // Delete image objects
     delete image;
     delete image2;
     delete image3;
     delete image4;
+    delete image5;
 }
 
 //---------------------------------------------------------------------------
@@ -376,8 +377,9 @@ void draw()
     // Draw objects in the scene
     drawFloor( floorTexture );
     drawAxis();
-    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0, detail, chainRotation );
-    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0, detail, chainRotation );
+    drawChain( 20, 30.0, 0.0 + teapotRise, -50.0, detail, chainRotation );
+    drawChain( 20, 40.0, 0.0 + teapotRise, -40.0, detail, chainRotation );
+    drawAnchor( detail, anchorTexture );
     drawRocks( detail, rockTexture );
     drawTeapot( 'S', 29.5, -9.0 + teapotRise, -50.0, rockTexture, chainRotation );
     drawTeapot( 'W', 39.5, -9.0 + teapotRise, -40.0, rockTexture, chainRotation );

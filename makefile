@@ -9,7 +9,8 @@ CC = g++
 CFLAGS = -Wall
 EXEC = opengeehell
 DEPRECATED=-Wno-deprecated-declarations
-SRC = main.cpp imageloader.cpp floor.cpp axis.cpp anchor.cpp rocks.cpp teapot.cpp flag.cpp bubbles.cpp
+SRC1 = main.cpp imageloader.cpp floor.cpp axis.cpp chain.cpp rocks.cpp
+SRC2 = teapot.cpp flag.cpp bubbles.cpp anchor.cpp
 
 # SET LIBS BASED ON OS
 ifeq ($(shell uname),Darwin)
@@ -20,8 +21,8 @@ endif
 
 all : $(EXEC)
 
-$(EXEC) : $(SRC)
-	$(CC) $(CFLAGS) -o $(EXEC) $(SRC) $(LIBS) $(DEPRECATED)
+$(EXEC) : $(SRC1) $(SRC2)
+	$(CC) $(CFLAGS) -o $(EXEC) $(SRC1) $(SRC2) $(LIBS) $(DEPRECATED)
 
 run:
 	./$(EXEC)

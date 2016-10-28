@@ -38,22 +38,22 @@
 \begin{titlepage}
 	\begin{center}
 		\vspace*{1cm}
-		\LARGE\textbf{CG400 Report}
+		\LARGE\textbf{CG200 Report}
 		\break
 		OpenGL Assignment
 		\vspace{1cm}
 		\break
 		\Large\textbf{Connor Beardsmore - 15504319} 
 
-		\vspace{3cm}
+		\vspace{1cm}
 		\begin{figure}[H]
 			\begin{center}
 				{\transparent{0.5} 
-					\includegraphics[height=0.3\textheight,width=0.8\textwidth]{opengl.png}}
+					\includegraphics[height=0.5\textheight,width=\textwidth]{scene.png}}
 			\end{center}
 		\end{figure}
 
-		\vspace{4cm}
+		\vspace{2cm}
 		\normalsize
 		Curtin University \\
 		Science and Engineering \\
@@ -74,7 +74,7 @@
 
 \vspace*{0.8cm}
 \section*{Features Implemented}
-adsdsaadsa
+adadasdsa
 
 %-------------------------------------------------------------------------------
 
@@ -84,12 +84,17 @@ adsdsaadsa
 %-------------------------------------------------------------------------------
 
 \section*{Objects Modelled and Surface Finishes}
-adsdsaadsa
 
+The scene consists of multiple shapes, both simple and composite. The floor was modelled as a simple square plane, with a basic "dirt" bitmap for it's texture mapping. Three rock objects were created via calls to gluSphere(). These rocks also utilized a texture map to provide additional realism. Further spheres were employed for use in the three transparent bubbles on the left of the scene. These spheres vary in size with transparency to correlate with real bubbles. While appearing complex, the teapots are actually created through the GLUT library, with calls to glutSolidTeapot(). The teapot is the only object in the GLUT library that allows for texture mapping and thus, a "brass" texture map was applied to the teapots. The use of material surface finishes creates the appearance that the teapot is old, mouldy and rusted. \\
+
+The composite objects are the teapot chain, the pirate flagpole and the wooden anchor. These three composite objects use combinations of various simple objects such as spheres, torus, cylinders and cones to a varying degree of complexity. The teapot chain is simply a torus, scale and stretched. The torus is repeatedly created in a for loop, with each alternative object being rotated at a 90 degree angle to the previous. The flagpole consists of a sphere top, cylinder pole and flat plane for the flag.
+
+// TALK ABOUT ANCHOR HERE
 %-------------------------------------------------------------------------------
 
 \section*{External Tools}
-adsdsaadsa
+
+No external tools were utilized for the scene. All composite objects were modelled within the code with no external assistance. More complex composite objects could have been converted from .obj files, but it was a stronger learning experience to create these objects myself through trial and error techniques.
 
 %-------------------------------------------------------------------------------
 

@@ -18,12 +18,6 @@ void drawFlag( double xStart, double yStart, double zStart, int detail, GLuint t
 {
     glPushMatrix();
 
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glDisable(GL_LIGHTING);
-
         glTranslatef( xStart, yStart, zStart );
 
         //MAIN CYLINDER
@@ -45,6 +39,13 @@ void drawFlag( double xStart, double yStart, double zStart, int detail, GLuint t
 
         //FLAG BOX
         glPushMatrix();
+
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glDisable(GL_LIGHTING);
+
             glRotatef( 70.0f, 0.0f, 0.0f, 1.0f );
             glColor3f( 1.0f, 1.0f, 1.0f );
             glScalef( 12.0f, 18.0f, 1.0f );
@@ -59,10 +60,11 @@ void drawFlag( double xStart, double yStart, double zStart, int detail, GLuint t
                 glTexCoord2f(1.0, 0.0);
                 glVertex3f(1.0f, 0.0f, 0.0f);
             glEnd();
-        glPopMatrix();
 
-        glEnable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_2D);
+            glEnable(GL_LIGHTING);
+            glDisable(GL_TEXTURE_2D);
+
+        glPopMatrix();
 
     glPopMatrix();
 }

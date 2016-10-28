@@ -1,8 +1,8 @@
 /***************************************************************************
-*  FILE: rocks.hpp
+*  FILE: chain.hpp
 *  AUTHOR: Connor Beardsmore - 15504319
 *  UNIT: CG200 Assignment S2 - 2016
-*  PURPOSE: Header file for rocks.cpp
+*  PURPOSE: Header file for chain.cpp
 *  LAST MOD: 12/10/16
 *  REQUIRES: OpenGL.h, glut.h
 ***************************************************************************/
@@ -16,9 +16,11 @@
     #include <GL/glut.h>
 #endif
 
+#include "colors.hpp"
+
 //---------------------------------------------------------------------------
 //FUNCTION PROTOTYPES
 
-void drawAnchor(int,GLuint);
+void drawChain(int,double,double,double,int,GLfloat);
 
 //---------------------------------------------------------------------------
