@@ -60,6 +60,7 @@ GLuint detail;
 //TEXTURE IDS
 GLuint floorTexture;
 GLuint anchorTexture;
+GLuint rockTexture;
 
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES

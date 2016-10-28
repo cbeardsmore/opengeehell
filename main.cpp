@@ -180,14 +180,17 @@ void init()
     // Load bitmaps into images
     Image* image = loadBMP( "./textures/dirt.bmp" );
     Image* image2 = loadBMP( "./textures/g.bmp" );
+    Image* image3 = loadBMP( "./textures/rock.bmp" );
 
     // Load images into textures
     floorTexture = loadTexture( image );
     anchorTexture = loadTexture( image2 );
+    rockTexture = loadTexture( image3 );
 
     // Delete image objects
     delete image;
     delete image2;
+    delete image3;
 }
 
 //---------------------------------------------------------------------------
@@ -356,13 +359,12 @@ void draw()
     // Draw objects in the scene
     drawFloor( floorTexture );
     drawAxis();
-    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0, anchorTexture, detail );
-    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0, anchorTexture, detail );
-    drawRocks( detail, floorTexture );
-    drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0 );
-    drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0 );
+    drawAnchor( 20, 30.0, 0.0 + teapotRise, -50.0, detail );
+    drawAnchor( 20, 40.0, 0.0 + teapotRise, -40.0, detail );
+    drawRocks( detail, rockTexture );
+    drawTeapot( 'S', 33.0, -9.0 + teapotRise, -50.0, rockTexture );
+    drawTeapot( 'W', 43.0, -9.0 + teapotRise, -40.0, rockTexture );
     drawFlag( -50.0f, 28.0f - flagFall, -105.0f, detail );
-
 
 
     glPushMatrix();

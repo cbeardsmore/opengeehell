@@ -23,7 +23,7 @@ void drawFloor( GLuint textureID )
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glDisable(GL_LIGHTING);
-        
+
         glColor3f(0.3, 0.2, 0.1);
         // Translate down below the origin + camera
         glTranslatef(0.0, -20.0, 0.0);
