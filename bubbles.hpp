@@ -1,5 +1,5 @@
 /***************************************************************************
-*  FILE: bubbles
+*  FILE: bubbles.hpp
 *  AUTHOR: Connor Beardsmore - 15504319
 *  UNIT: CG200 Assignment S2 - 2016
 *  PURPOSE: Header file for bubbles.cpp

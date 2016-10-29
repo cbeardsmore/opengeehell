@@ -48,7 +48,7 @@
 		\vspace{1cm}
 		\begin{figure}[H]
 			\begin{center}
-				{\transparent{0.2} 
+				{\transparent{0.9} 
 					\includegraphics[height=0.5\textheight,width=\textwidth]{scene.png}}
 			\end{center}
 		\end{figure}
@@ -103,18 +103,17 @@ The composite objects are the teapot chain, the pirate flagpole and the wooden a
 
 \section*{External Tools}
 
-No external tools were utilized for the scene. All composite objects were modelled within the code with no external assistance. More complex composite objects could have been converted from .obj files, but it was a stronger learning experience to create these objects myself through trial and error techniques.
+The imageloader.cpp file was gathered externally from \cite{VidRock}. This resource is a bitmap loader, allowing for the use of texture mapping on objects within the scene. The resource was easily applied from my code and was a simple method to call to read in the .bmp image files. All composite objects were modelled within the code with no external assistance. More complex composite objects could have been converted from .obj files, but it was a stronger learning experience to create these objects myself through trial and error techniques.
+
+stole bitmaps from places
 
 %-------------------------------------------------------------------------------
 
 \section*{Animation}
 
-\begin{itemize}
-	\item flag pole sinks into ground
-	\item bubbles translate up,right and back into the distance
-	\item teapot chain mvoes up and rotates 
-	\item fog moves forwards/backwards over time
-\end{itemize}
+The scene includes a basic animation illustrating the capabilities of OpenGL. The pirate flag sinks into the ground slowly over the course of the animation, while the transparent bubbles on the left of the scene float into the background. These bubbles are simply translated simultaneously along all three coordinate axis. The two GLUT teapots are pulled up from the bottom, with the chain rotating round as they move. This simulates the spinning of the chain about the Y axis. To add a further layer of realism, the fog moves forwards to fully cover the scene as time progresses.\\
+
+The user can utilize a variety of key presses to control the animation as they wish. The A key starts the animation, while the T and C keys pause and resume the movement respectively. S and F work to slow down or speed up the scene. The key presses work my modifying a global \textit{speed} variables. This variable controls the translations and rotations of the objects, with a larger value resulting in a faster animation.
 
 %-------------------------------------------------------------------------------
 

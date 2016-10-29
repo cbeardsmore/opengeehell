@@ -73,7 +73,7 @@ void input(unsigned char key, int mouseX, int mouseY)
         case 'A':
         case 'a':
             paused = false;
-            if ( speed < 0.01 )
+            if ( speed < 0.0001 )
                 speed += 0.02;
         // Faster
         case 'F':
@@ -186,24 +186,21 @@ void init()
 
     // Load bitmaps into images
     Image* image = loadBMP( "./textures/dirt.bmp" );
-    Image* image2 = loadBMP( "./textures/g.bmp" );
-    Image* image3 = loadBMP( "./textures/rock.bmp" );
-    Image* image4 = loadBMP( "./textures/flag.bmp" );
-    Image* image5 = loadBMP( "./textures/wood.bmp" );
+    Image* image2 = loadBMP( "./textures/rock.bmp" );
+    Image* image3 = loadBMP( "./textures/flag.bmp" );
+    Image* image4 = loadBMP( "./textures/wood.bmp" );
 
     // Load images into textures
     floorTexture = loadTexture( image );
-    chainTexture = loadTexture( image2 );
-    rockTexture = loadTexture( image3 );
-    flagTexture = loadTexture( image4 );
-    anchorTexture = loadTexture( image5 );
+    rockTexture = loadTexture( image2 );
+    flagTexture = loadTexture( image3 );
+    anchorTexture = loadTexture( image4 );
 
     // Delete image objects
     delete image;
     delete image2;
     delete image3;
     delete image4;
-    delete image5;
 }
 
 //---------------------------------------------------------------------------
@@ -255,7 +252,7 @@ void printControls()
         controls[8] = "<a><A>: Pause Animation";
         controls[8] = "<a><A>: Resume Animation";
         controls[9] = "<r><R>: Reset All";
-        controls[10] = "<Esc>: Quit Program";
+        controls[10] = "<Q>: Quit Program";
 
         // Actual text printed to the screen
         for ( int ii = 0; ii < numControls; ii++ )
