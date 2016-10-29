@@ -70,6 +70,10 @@ GLuint rockTexture;
 GLuint flagTexture;
 GLuint anchorTexture;
 
+//FOG location
+GLfloat fogStart;
+GLfloat fogFinish;
+
 //---------------------------------------------------------------------------
 // FUNCTION PROTOTYPES
 

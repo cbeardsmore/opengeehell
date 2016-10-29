@@ -137,6 +137,8 @@ void init()
     bubbMove = 0.0;
     bubbBack = 0.0;
     chainRotation = 0;
+    fogStart = 40.0;
+    fogFinish = 120.0;
 
     // Background color and enable depth testing
     glClearColor( BACKGROUND_COLOR );
@@ -288,6 +290,8 @@ void reset()
     bubbMove = 0.0;
     bubbBack = 0.0;
     chainRotation = 0;
+    fogStart = 40.0;
+    fogFinish = 120.0;
 }
 
 //---------------------------------------------------------------------------
@@ -358,6 +362,7 @@ void draw()
         bubbMove += speed*0.1;
         bubbBack += speed*0.9;
         chainRotation += speed*5.0;
+        fogStart -= 0.2;
     }
 
     // X and Y rotations based on angles
@@ -371,8 +376,8 @@ void draw()
     GLfloat fogColor[] = {0.0f, 0.0f, 1.0f, 1};
     glFogfv(GL_FOG_COLOR, fogColor);
     glFogi(GL_FOG_MODE, GL_LINEAR);
-    glFogf(GL_FOG_START, 0.0f);
-    glFogf(GL_FOG_END, 150.0f);
+    glFogf(GL_FOG_START, fogStart);
+    glFogf(GL_FOG_END, fogFinish);
 
     // Draw objects in the scene
     drawFloor( floorTexture );
