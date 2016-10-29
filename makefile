@@ -16,7 +16,7 @@ SRC2 = teapot.cpp flag.cpp bubbles.cpp anchor.cpp
 ifeq ($(shell uname),Darwin)
 	LIBS = -framework OpenGL -framework GLUT
 else
-	LIBS = -lglut
+	LIBS = -lglut -lGL -lGLU
 endif
 
 all : $(EXEC)

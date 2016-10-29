@@ -18,29 +18,25 @@ void drawFloor( GLuint textureID )
 {
     glPushMatrix();
 
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //glEnable(GL_TEXTURE_2D);
+        //glBindTexture(GL_TEXTURE_2D, textureID);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
         glDisable(GL_LIGHTING);
 
-        glColor3f(0.3, 0.2, 0.1);
         // Translate down below the origin + camera
-        glTranslatef(0.0, -20.0, 0.0);
-
-        glBegin(GL_QUADS);
-            glTexCoord2f(0.0, 0.0);
-            glVertex3fv(floorVertices[0]);
-            glTexCoord2f(0.0, 1600.0);
-            glVertex3fv(floorVertices[1]);
-            glTexCoord2f(1600.0, 1600.0);
-            glVertex3fv(floorVertices[2]);
-            glTexCoord2f(1600.0, 0.0);
-            glVertex3fv(floorVertices[3]);
-        glEnd();
+        glTranslatef(0.0, -40.0, 0.0);
+        glScalef(2.0f, 0.05f, 2.0f);
+        glColor3f( 0.1f, 0.1f, 0.0f );
+        GLUquadric* quaddy = gluNewQuadric();
+        //gluQuadricTexture( quaddy, GL_TRUE );
+        gluSphere( quaddy, 400.5, 400, 400 );
 
         glEnable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_2D);
+        //glDisable(GL_TEXTURE_2D);
 
     glPopMatrix();
 

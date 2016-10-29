@@ -55,6 +55,8 @@ GLfloat zoom;           // Zoom level
 GLfloat xAngle;         // X rotation angle
 GLfloat yAngle;         // Y rotation angle
 GLfloat speed;          // Speed of animation
+
+// ANIMATION GLOBALS
 GLfloat teapotRise;
 GLfloat flagFall;
 GLfloat bubbRise;
@@ -70,7 +72,7 @@ GLuint rockTexture;
 GLuint flagTexture;
 GLuint anchorTexture;
 
-//FOG location
+//FOG LOCATION
 GLfloat fogStart;
 GLfloat fogFinish;
 
