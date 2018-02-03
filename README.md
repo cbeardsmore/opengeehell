@@ -4,12 +4,11 @@
 
 ##### Purpose
 
-A basic scene and simple animation in OpenGl for the theme of "Under the Sea"
+A basic scene and simple animation in OpenGL for the theme of "Under the Sea". Animation and jumping is performed by keypresses, shown by the menu.
 
 ##### File Listing
 
 ~~~
-documentation/ = Full LaTeX report and specifications
 textures/ = All texture images
 imageloader.cpp = Image loader to load in .bmp files
 main.cpp = Main program code
